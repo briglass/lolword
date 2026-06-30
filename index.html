@@ -272,10 +272,40 @@
         </div>
       </a>
 
-      <!-- BUTTON 3: COMING SOON -->
+      <!-- BUTTON 3: DONTLE -->
+      <a href="games/dontle/index.html"
+         id="btn-dontle"
+         class="retro-btn flex flex-col items-center justify-between text-center p-4 sm:p-6 md:p-8 bg-rose-600 border-4 border-black rounded-3xl group relative overflow-hidden h-64 sm:h-72 md:h-80 select-none">
+        <!-- Radial pattern background on hover -->
+        <div class="absolute inset-0 bg-[radial-gradient(#e11d48_20%,transparent_20%)] [background-size:16px_16px] opacity-20 group-hover:scale-110 transition-transform duration-500"></div>
+        
+        <!-- Header tag inside button -->
+        <span class="z-10 bg-black text-rose-400 text-[10px] sm:text-xs px-2 py-0.5 sm:px-3 sm:py-1 font-mono rounded-full uppercase border-2 border-rose-500 tracking-wider animate-pulse font-bold">
+          DO NOT PLAY!
+        </span>
+
+        <!-- SVG X Icon -->
+        <div class="z-10 my-2 sm:my-4 transform group-hover:rotate-90 group-hover:scale-125 transition-all duration-300 flex justify-center items-center">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-black text-white p-3 md:p-4 rounded-full flex items-center justify-center border-4 border-rose-500 shadow-[4px_4px_0px_0px_#000]">
+            <i data-lucide="x" class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 stroke-[3] text-rose-500"></i>
+          </div>
+        </div>
+
+        <!-- Button Info -->
+        <div class="z-10">
+          <h2 class="text-base sm:text-2xl md:text-3xl font-black text-black tracking-tighter md:tracking-tight uppercase group-hover:text-white transition-colors duration-200">
+            DONTLE
+          </h2>
+          <p class="text-[10px] sm:text-xs md:text-sm font-bold text-black/80 mt-1 font-mono italic">
+            Do not play DONTLE
+          </p>
+        </div>
+      </a>
+
+      <!-- BUTTON 4: COMING SOON -->
       <a href="comingsoon.html"
          id="btn-soon"
-         class="retro-btn flex flex-col items-center justify-between text-center p-4 sm:p-6 md:p-8 bg-zinc-900 border-4 border-black rounded-3xl group relative overflow-hidden h-64 sm:h-72 md:h-80 col-span-2 select-none">
+         class="retro-btn flex flex-col items-center justify-between text-center p-4 sm:p-6 md:p-8 bg-zinc-900 border-4 border-black rounded-3xl group relative overflow-hidden h-64 sm:h-72 md:h-80 select-none">
         <!-- Matrix/glitch pattern background -->
         <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[size:100%_8px] opacity-40"></div>
         
@@ -475,9 +505,37 @@
       }
     }
 
+    // Play warning alarm buzz for DONTLE
+    function playWarningAlarm(forceInit = false) {
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(220, now + 0.1);
+        osc.frequency.setValueAtTime(110, now + 0.15);
+        
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     // Bind Sound FX to hover/actions
     document.getElementById('btn-jeff').addEventListener('mouseenter', playGoldblumChime);
     document.getElementById('btn-brundle').addEventListener('mouseenter', () => playFlyBuzz(0.8));
+    document.getElementById('btn-dontle').addEventListener('mouseenter', playWarningAlarm);
     document.getElementById('btn-soon').addEventListener('mouseenter', playSpookyDrop);
 
     // Create floating flies and sunglasses in ambient container

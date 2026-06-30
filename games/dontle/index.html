@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" class="min-h-screen">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TQSTTJ00HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DONTLE - Do Not Play This Game</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <!-- Suppress Tailwind Play CDN Warning -->
+    <script>
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        correct: '#e11d48', // Red-600
+                        present: '#f59e0b', // Amber-500
+                        absent: '#3f3f46',  // Zinc-700
+                    },
+                    animation: {
+                        'pop': 'pop 0.15s ease-in-out',
+                        'flip': 'flip 0.5s ease-in-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        pop: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '40%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        flip: {
+                            '0%': { transform: 'rotateX(0deg)' },
+                            '45%': { transform: 'rotateX(90deg)' },
+                            '55%': { transform: 'rotateX(90deg)' },
+                            '100%': { transform: 'rotateX(0deg)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '15%, 45%, 75%': { transform: 'translateX(-5px)' },
+                            '30%, 60%, 90%': { transform: 'translateX(5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Win Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .text-neon {
+            text-shadow: 0 0 10px rgba(225, 29, 72, 0.5), 0 0 20px rgba(225, 29, 72, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between overflow-y-auto select-none">
+    <div id="disruption-overlay" class="pointer-events-none fixed inset-0 overflow-hidden z-40"></div>
+
+    <!-- Header -->
+    <header class="border-b border-zinc-800 px-4 py-2 flex items-center justify-between w-full max-w-lg mx-auto shrink-0">
+        <div class="flex items-center gap-2">
+            <!-- Back to LOLWORD link -->
+            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white px-2.5 py-1.5 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                BACK TO LOLWORD
+            </a>
+            <button id="btn-help" class="text-zinc-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                </svg>
+            </button>
+        </div>
+
+        <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-rose-500 to-red-600 bg-clip-text text-transparent select-none cursor-pointer text-neon" onclick="window.location.reload()">
+            DONTLE
+        </h1>
+
+        <div class="flex items-center gap-2">
+            <button id="btn-stats" class="text-zinc-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="flex-grow flex flex-col justify-start items-center py-4 px-4 max-w-lg w-full mx-auto relative">
+        
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+        <!-- 6x5 Letter Grid -->
+        <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[240px] sm:max-w-[280px] my-4" style="min-height: 18rem;">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Warning Message above Keyboard and Keyboard Area -->
+    <footer class="w-full max-w-md mx-auto p-2 pb-6 shrink-0">
+        <!-- Message above keyboard as requested -->
+        <div class="text-center mb-1.5">
+            <p class="text-red-500 font-black text-base sm:text-lg uppercase tracking-widest animate-pulse flex items-center justify-center gap-2">
+                ⚠️ Do not play DONTLE ⚠️
+            </p>
+        </div>
+        <div id="keyboard" class="flex flex-col gap-2">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+    </footer>
+
+    <!-- MODAL 1: How to Play -->
+    <div id="modal-help" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-red-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z" />
+                    </svg>
+                    How To Play DONTLE
+                </h2>
+                <button class="modal-close text-zinc-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-zinc-300 leading-relaxed max-h-[60vh] overflow-y-auto">
+                <p class="font-extrabold text-red-400 text-base">⚠️ WARNING: DO NOT PLAY DONTLE.</p>
+                <p>Unlike regular word games, the rules of <span class="font-bold text-white">DONTLE</span> are simple:</p>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li>Do <strong class="text-red-500">NOT</strong> enter any words.</li>
+                    <li>If you enter a word and press ENTER, you lose instantly.</li>
+                    <li>An invisible, randomized timer is ticking in the background.</li>
+                    <li>If you successfully resist the urge to play until the timer completes, <strong class="text-green-500">YOU WIN!</strong></li>
+                </ul>
+
+                <hr class="border-zinc-800 my-4" />
+
+                <h3 class="font-bold text-white mb-2">Can you resist typing?</h3>
+                <p class="text-xs text-zinc-400">The temptation is intense. The grid is right there. The keyboard is right there. But remember: do not play.</p>
+            </div>
+            <div class="p-6 bg-zinc-900/50 border-t border-zinc-800 flex justify-end">
+                <button class="modal-close px-5 py-2 bg-red-600 hover:bg-red-500 font-semibold text-white rounded-xl transition-colors shadow-lg shadow-red-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                    I Will Not Play
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Statistics & Game Over -->
+    <div id="modal-stats" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+                <h2 id="stats-title" class="text-xl font-bold tracking-tight text-white">DONTLE Status</h2>
+                <button class="modal-close text-zinc-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <!-- Status Banner -->
+                <div id="status-banner" class="p-4 rounded-xl border text-center font-bold text-lg select-none">
+                    <!-- Dynamic text: Win or Loss -->
+                </div>
+
+                <!-- Stats grid -->
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                        <div id="stat-played" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Played</div>
+                    </div>
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                        <div id="stat-winpct" class="text-2xl font-extrabold text-white">0%</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Win %</div>
+                    </div>
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                        <div id="stat-streak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Streak</div>
+                    </div>
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                        <div id="stat-maxstreak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Max Streak</div>
+                    </div>
+                </div>
+
+                <!-- Action section (Share) -->
+                <div class="flex items-center gap-4 bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+                    <div class="flex-grow flex flex-col justify-center items-center py-1">
+                        <p id="share-info-text" class="text-xs text-zinc-400 mb-1.5 font-medium">Share your resistance level!</p>
+                        <button id="btn-share" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-500 font-bold text-white rounded-xl transition-colors shadow-lg shadow-red-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                            SHARE RESULT
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-zinc-900/50 border-t border-zinc-800 flex justify-between items-center">
+                <button id="btn-reset-stats" class="text-xs text-rose-400 hover:text-rose-300 font-medium transition-colors focus:outline-none">
+                    Reset Stats
+                </button>
+                <button id="btn-play-again" class="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 font-semibold text-white rounded-xl transition-colors text-sm focus:outline-none">
+                    Try to Resist Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Script references: point directly to the seizurele ones for DRY lists, then our app.js -->
+    <script src="../seizurele/allowed.js"></script>
+    <script src="../seizurele/words.js"></script>
+    <script src="app.js"></script>
+    <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
+    <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
+</body>
+</html>
