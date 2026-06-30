@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TQSTTJ00HS');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOLWORD - Classified Broadcast</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts for Surreal Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Creepster&family=Rubik+Glitch&family=Space+Grotesk:wght@400;700;900&family=Syne:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Wild, animated, changing gradient background */
+    @keyframes wildBg {
+      0% {
+        background-position: 0% 50%;
+      }
+      25% {
+        background-position: 50% 100%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      75% {
+        background-position: 50% 0%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes hueShift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    body {
+      background: linear-gradient(
+        135deg,
+        #ff007f,
+        #7f00ff,
+        #00ffff,
+        #00ff00,
+        #ffff00,
+        #ff8000,
+        #ff0000,
+        #ff00ff
+      );
+      background-size: 800% 800%;
+      animation: wildBg 15s ease infinite, hueShift 25s linear infinite;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* CRT scanlines effect for retro-cyber-surrealism */
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
+      background-size: 100% 4px, 6px 100%;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    /* Glitch effect for titles */
+    .glitch-title {
+      font-family: 'Rubik Glitch', sans-serif;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8), 5px 5px 0px #ff00ff, -5px -5px 0px #00ffff;
+      animation: textPulsate 2s infinite alternate;
+    }
+
+    @keyframes textPulsate {
+      0% {
+        transform: scale(1) skewX(0deg);
+      }
+      50% {
+        transform: scale(1.02) skewX(2deg);
+      }
+      100% {
+        transform: scale(0.98) skewX(-2deg);
+      }
+    }
+
+    .retro-btn {
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .retro-btn:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 8px 8px 0px 0px #000;
+    }
+    .retro-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px #000;
+    }
+
+    .floating-item {
+      position: absolute;
+      pointer-events: auto;
+      cursor: pointer;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center relative py-6">
+
+  <!-- CRT Retro Overlay -->
+  <div class="crt-overlay"></div>
+
+  <!-- Ambient Container for floating surreal elements -->
+  <div id="ambient-container" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+  <!-- Main Content Wrapper -->
+  <main class="w-full max-w-3xl px-4 flex-grow flex flex-col items-center justify-center z-10 my-8">
+    
+    <!-- Title Area -->
+    <header class="text-center mb-8 select-none">
+      <div class="inline-block relative">
+        <h1 class="text-5xl md:text-7xl font-black tracking-tighter glitch-title text-white uppercase select-none">
+          TOP SECRET
+        </h1>
+      </div>
+    </header>
+
+    <!-- Broadcaster Message Card -->
+    <section class="w-full bg-zinc-900 border-4 border-black rounded-3xl p-6 sm:p-10 shadow-[8px_8px_0px_0px_#000] relative overflow-hidden select-none mb-8">
+      <!-- Matrix/glitch scanline background -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[size:100%_8px] opacity-40 pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col items-center">
+        <!-- Warning Badge -->
+        <span class="bg-red-600 text-white text-xs sm:text-sm px-4 py-1.5 font-mono rounded-full uppercase border-2 border-white tracking-widest animate-pulse font-bold mb-6">
+          CLASSIFIED BROADCAST
+        </span>
+
+        <!-- Skull / Biohazard Icon -->
+        <div class="my-2 transform rotate-0 hover:rotate-180 hover:scale-110 transition-all duration-500">
+          <div class="w-20 h-20 bg-red-600 text-white p-4 rounded-full flex items-center justify-center border-4 border-black shadow-[4px_4px_0px_0px_#000] animate-bounce">
+            <i data-lucide="skull" class="w-12 h-12 stroke-[2.5] text-white"></i>
+          </div>
+        </div>
+
+        <!-- The Message -->
+        <div class="mt-6 text-center text-white font-mono text-sm sm:text-base leading-relaxed max-w-2xl border-2 border-dashed border-zinc-700 p-4 sm:p-6 rounded-2xl bg-black/50">
+          <p>
+            Greetings from the inventor of Jeffgoldblumle! Four years ago, I invented Jeffgoldblumle. Since then, it has completely changed my life along with the lives of millions of other people. It has not changed the life of Jeff Goldblum (yet). Recently, I invented a new game. However, this game has been deemed by several world government agencies including the WHO, the UN, and AARP, to be too DANGEROUS for public consumption. Luckily, these agencies have absolutely no enforcement mechanisms (yet). Therefore, I have set a release time for this new game. Once released, there is no telling what damage or havoc the game may unleash. See you then!
+          </p>
+        </div>
+
+        <!-- Countdown Header -->
+        <h3 class="text-zinc-400 font-bold uppercase tracking-wider font-mono text-xs sm:text-sm mt-8 mb-2">
+          Time Remaining Until Unclassified Unleashment
+        </h3>
+
+        <!-- Countdown display in seconds -->
+        <div class="px-6 py-3 bg-black/80 border-4 border-red-600 rounded-2xl font-mono font-black text-2xl sm:text-4xl text-red-500 tracking-widest shadow-[0_0_20px_rgba(239,68,68,0.4)] flex items-center gap-2">
+          <span id="countdown-seconds" class="animate-pulse">00000000</span> SECONDS
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation / Link Back to Hub -->
+    <nav class="w-full flex justify-center">
+      <a href="index.html" 
+         id="btn-back"
+         class="retro-btn flex items-center gap-3 px-8 py-4 bg-white text-black border-4 border-black rounded-2xl font-black uppercase text-lg sm:text-xl shadow-[4px_4px_0px_0px_#000] select-none hover:bg-yellow-300">
+        <i data-lucide="arrow-left" class="w-6 h-6 stroke-[3]"></i>
+        Back to LOLWORD.com
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full text-center py-4 font-mono text-sm text-black bg-white/70 border-t-4 border-black rounded-t-xl py-2 px-4 z-10 select-none">
+    <p class="font-bold">
+      LOLWORD Hub &copy; 2026.
+    </p>
+    <p class="text-xs text-gray-800 mt-1">
+      No flies were harmed in the making of these clones.
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Sound Synthesizer via Web Audio API
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioCtx();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Spooky sound effect
+    function playSpookyDrop() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 1.0);
+        
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(now);
+        osc.stop(now + 1.0);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Buzz sound for flies
+    function playFlyBuzz(duration = 0.5) {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + duration);
+
+        const mod = audioCtx.createOscillator();
+        const modGain = audioCtx.createGain();
+        mod.frequency.value = 35;
+        modGain.gain.value = 40;
+        
+        mod.connect(modGain);
+        modGain.connect(osc.frequency);
+        
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        mod.start();
+        osc.stop(audioCtx.currentTime + duration);
+        mod.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function playGoldblumChime() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const notes = [261.63, 329.63, 392.00, 523.25];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+          osc.frequency.exponentialRampToValueAtTime(freq * 2, now + 0.5);
+          
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.08, now + (idx * 0.08) + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.start(now);
+          osc.stop(now + 1.2);
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Play spooky drop on button hover/click
+    document.getElementById('btn-back').addEventListener('mouseenter', playGoldblumChime);
+
+    // Ambient floating items
+    const ambientContainer = document.getElementById('ambient-container');
+    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨'];
+
+    function spawnAmbientItem() {
+      if (document.hidden) return;
+      const el = document.createElement('div');
+      el.className = 'floating-item text-4xl select-none';
+      el.textContent = itemsList[Math.floor(Math.random() * itemsList.length)];
+      
+      const x = Math.random() * 100;
+      const startY = 110;
+      const endY = -10;
+      const duration = 8 + Math.random() * 12;
+      const rotation = Math.random() * 360;
+      const scale = 0.5 + Math.random() * 1.5;
+
+      el.style.left = `${x}%`;
+      el.style.top = `${startY}%`;
+      el.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+      el.style.transition = `top ${duration}s linear, left ${duration}s ease-in-out, transform ${duration}s linear`;
+      
+      ambientContainer.appendChild(el);
+
+      setTimeout(() => {
+        el.style.top = `${endY}%`;
+        el.style.left = `${x + (Math.random() * 20 - 10)}%`;
+        el.style.transform = `scale(${scale}) rotate(${rotation + (Math.random() * 720 - 360)}deg)`;
+      }, 50);
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (el.textContent === '🪰') {
+          playFlyBuzz(0.3);
+          el.textContent = '💥';
+          setTimeout(() => el.remove(), 200);
+        } else if (el.textContent === '🕶️') {
+          playGoldblumChime();
+          el.textContent = '✨';
+          setTimeout(() => el.remove(), 200);
+        } else if (el.textContent === '💀') {
+          playSpookyDrop();
+          el.textContent = '💨';
+          setTimeout(() => el.remove(), 200);
+        } else {
+          el.textContent = '💥';
+          setTimeout(() => el.remove(), 200);
+        }
+      });
+
+      setTimeout(() => {
+        el.remove();
+      }, duration * 1000 + 100);
+    }
+
+    setInterval(spawnAmbientItem, 2000);
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        if (document.hidden) return;
+        const el = document.createElement('div');
+        el.className = 'floating-item text-3xl select-none';
+        el.textContent = itemsList[Math.floor(Math.random() * itemsList.length)];
+        const x = Math.random() * 100;
+        const y = Math.random() * 80 + 10;
+        el.style.left = `${x}%`;
+        el.style.top = `${y}%`;
+        el.style.transform = `rotate(${Math.random() * 360}deg)`;
+        ambientContainer.appendChild(el);
+        setTimeout(() => {
+          el.style.transition = 'all 10s linear';
+          el.style.top = '-20%';
+        }, 100);
+        setTimeout(() => el.remove(), 10500);
+      }, i * 800);
+    }
+
+    // Countdown to Midnight Pacific Time, July 4, 2026 (UTC-7)
+    const targetDate = new Date('2026-07-04T00:00:00-07:00');
+    const countdownEl = document.getElementById('countdown-seconds');
+
+    function updateCountdown() {
+      const now = new Date();
+      const differenceMs = targetDate - now;
+      const secondsRemaining = Math.max(0, Math.floor(differenceMs / 1000));
+      if (countdownEl) {
+        countdownEl.textContent = secondsRemaining.toLocaleString('en-US');
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
