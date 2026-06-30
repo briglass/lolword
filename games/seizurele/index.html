@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TQSTTJ00HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEIZURELE - Classic Wordle Clone with Solve Timer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        correct: '#538d4e', // Green
+                        present: '#b59f3b', // Yellow
+                        absent: '#3a3a3c',  // Dark gray
+                        correctDark: '#6aaa64',
+                        presentDark: '#c9b458',
+                        absentDark: '#787c7e',
+                    },
+                    animation: {
+                        'pop': 'pop 0.15s ease-in-out',
+                        'flip': 'flip 0.5s ease-in-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'bounce-win': 'bounce-win 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        pop: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '40%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        flip: {
+                            '0%': { transform: 'rotateX(0deg)' },
+                            '45%': { transform: 'rotateX(90deg)' },
+                            '55%': { transform: 'rotateX(90deg)' },
+                            '100%': { transform: 'rotateX(0deg)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '15%, 45%, 75%': { transform: 'translateX(-5px)' },
+                            '30%, 60%, 90%': { transform: 'translateX(5px)' },
+                        },
+                        'bounce-win': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Win Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar-free styling for a web app feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .flip-delay-0 { animation-delay: 0ms; }
+        .flip-delay-1 { animation-delay: 150ms; }
+        .flip-delay-2 { animation-delay: 300ms; }
+        .flip-delay-3 { animation-delay: 450ms; }
+        .flip-delay-4 { animation-delay: 600ms; }
+
+        .bounce-delay-0 { animation-delay: 0ms; }
+        .bounce-delay-1 { animation-delay: 100ms; }
+        .bounce-delay-2 { animation-delay: 200ms; }
+        .bounce-delay-3 { animation-delay: 300ms; }
+        .bounce-delay-4 { animation-delay: 400ms; }
+        @keyframes bgFlash {
+            0% { background-color: #020617; }
+            50% { background-color: #111827; }
+            100% { background-color: #0b1220; }
+        }
+        .flash-background {
+            animation: bgFlash 1s ease-in-out infinite alternate;
+        }
+        @keyframes tileFlash {
+            0% { filter: hue-rotate(0deg) saturate(1) brightness(1); }
+            50% { filter: hue-rotate(180deg) saturate(2) brightness(1.2); }
+            100% { filter: hue-rotate(360deg) saturate(1) brightness(1); }
+        }
+        .flash-tile {
+            animation: tileFlash 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes sweep {
+            0% { transform: translateX(-120%) translateY(0) scale(0.8); opacity: 0; }
+            30% { opacity: 0.35; }
+            70% { opacity: 0.35; }
+            100% { transform: translateX(120%) translateY(30vh) scale(1.3); opacity: 0; }
+        }
+        .sweep-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 40;
+            opacity: 0;
+            mix-blend-mode: screen;
+            border-radius: 999px;
+            filter: blur(15px);
+            animation: sweep 2.4s ease-in-out forwards;
+        }
+        .disruption-spin .spin-target {
+            animation: spin-slow var(--spin-duration, 8s) linear infinite;
+            animation-direction: var(--spin-direction, normal);
+        }
+        .flash-button {
+            animation: buttonFlash 0.6s ease-in-out alternate;
+            box-shadow: 0 0 0.75rem rgba(255,255,255,0.35);
+        }
+        .jitter-glitch {
+            animation: jitter 0.18s ease-in-out infinite alternate;
+        }
+        @keyframes buttonFlash {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05) rotate(1deg); filter: brightness(1.35) hue-rotate(60deg); }
+            100% { transform: scale(1) rotate(-1deg); filter: brightness(1) hue-rotate(-30deg); }
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes jitter {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(1px, -1px) rotate(-0.5deg); }
+            50% { transform: translate(-1px, 2px) rotate(0.5deg); }
+            75% { transform: translate(2px, -2px) rotate(-0.5deg); }
+            100% { transform: translate(-2px, 1px) rotate(0.5deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between overflow-hidden select-none">
+    <div id="disruption-overlay" class="pointer-events-none fixed inset-0 overflow-hidden z-40"></div>
+
+    <!-- Header -->
+    <header class="spin-target border-b border-slate-800 px-4 py-3 flex items-center justify-between w-full max-w-lg mx-auto shrink-0">
+        <div class="flex items-center gap-2">
+            <!-- Back to LOLWORD link -->
+            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white px-2.5 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                BACK TO LOLWORD
+            </a>
+            <button id="btn-help" class="text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                </svg>
+            </button>
+            <!-- Solve Timer Display -->
+            <div id="timer-container" class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1 flex items-center gap-1.5 text-xs font-semibold text-slate-400 shadow-sm">
+                <span class="relative flex h-2 w-2">
+                    <span id="timer-dot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-75"></span>
+                    <span id="timer-dot-inner" class="relative inline-flex rounded-full h-2 w-2 bg-slate-400"></span>
+                </span>
+                <span id="timer-display" class="font-mono tracking-wider">00:00.0</span>
+            </div>
+        </div>
+
+        <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent select-none cursor-pointer" onclick="window.location.reload()">
+            SEIZURELE
+        </h1>
+
+        <div class="flex items-center gap-2">
+            <button id="btn-stats" class="text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="spin-target flex-grow flex flex-col justify-center items-center p-4 max-w-lg w-full mx-auto relative overflow-hidden">
+        
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+        <!-- 6x5 Letter Grid -->
+        <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[330px] my-auto">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Keyboard Area -->
+    <footer class="w-full max-w-md mx-auto p-2 pb-4 shrink-0">
+        <div id="keyboard" class="flex flex-col gap-2">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+    </footer>
+
+    <!-- MODAL 1: How to Play -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-emerald-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                    </svg>
+                    How To Play
+                </h2>
+                <button class="modal-close text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto">
+                <p>Guess the <span class="font-bold text-white">SEIZURELE</span> in 6 tries.</p>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li>Each guess must be a valid 5-letter word.</li>
+                    <li>The color of the tiles will change to show how close your guess was to the word.</li>
+                    <li>
+                        <strong class="text-emerald-400">The solve timer starts the moment you input your first letter!</strong>
+                    </li>
+                </ul>
+
+                <hr class="border-slate-800 my-4" />
+
+                <h3 class="font-bold text-white mb-2">Examples</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-emerald-600 text-white rounded">W</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">E</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">A</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">R</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">Y</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">W</strong> is in the word and in the correct spot.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">P</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-yellow-600 text-white rounded">I</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">L</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">O</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">T</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">I</strong> is in the word but in the wrong spot.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">V</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">A</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">G</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-slate-800 text-slate-400 rounded">U</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">E</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">U</strong> is not in the word in any spot.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-900/50 border-t border-slate-800 flex justify-end">
+                <button class="modal-close px-5 py-2 bg-emerald-600 hover:bg-emerald-500 font-semibold text-white rounded-xl transition-colors shadow-lg shadow-emerald-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    Let's Play!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Statistics & Game Over -->
+    <div id="modal-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                <h2 id="stats-title" class="text-xl font-bold tracking-tight text-white">Statistics</h2>
+                <button class="modal-close text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <!-- Stats grid -->
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-played" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Played</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-winpct" class="text-2xl font-extrabold text-white">0%</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Win %</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-streak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Streak</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-maxstreak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Max Streak</div>
+                    </div>
+                </div>
+
+                <!-- Average Solve Time Row -->
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center">
+                    <div id="stat-avgtime" class="text-2xl font-black text-emerald-400 font-mono tracking-widest">00:00.0</div>
+                    <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400 mt-1">Average Solve Time</div>
+                </div>
+
+
+
+                <!-- Guess Distribution -->
+                <div>
+                    <h3 class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-3 text-center">Guess Distribution</h3>
+                    <div id="guess-distribution" class="space-y-2">
+                        <!-- Filled in dynamically -->
+                    </div>
+                </div>
+
+                <!-- Reveal Secret Word (if lost or won) -->
+                <div id="reveal-word-container" class="hidden text-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-1">Secret Word</p>
+                    <p id="secret-word-display" class="text-2xl font-black tracking-widest text-emerald-400 uppercase"></p>
+                </div>
+
+                <!-- Solve Timer Block -->
+                <div id="solve-time-container" class="hidden text-center bg-emerald-950/20 p-4 rounded-xl border border-emerald-900/30">
+                    <p class="text-xs text-emerald-400/80 uppercase tracking-widest font-bold mb-1">⚡ Solving Time</p>
+                    <p id="solve-time-display" class="text-3xl font-black font-mono text-emerald-400 tracking-wider">00:00.0</p>
+                </div>
+
+                <!-- Action section (Share / Timer / Reset) -->
+                <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="flex-grow flex flex-col justify-center items-center py-1">
+                        <p id="share-info-text" class="text-xs text-slate-400 mb-1 font-medium">Share your result!</p>
+                        <button id="btn-share" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl transition-colors shadow-lg shadow-emerald-900/20 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                            SHARE RESULT
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-900/50 border-t border-slate-800 flex justify-between items-center">
+                <button id="btn-reset-stats" class="text-xs text-rose-400 hover:text-rose-300 font-medium transition-colors focus:outline-none">
+                    Reset Stats
+                </button>
+                <button id="btn-play-again" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 font-semibold text-white rounded-xl transition-colors text-sm focus:outline-none">
+                    Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Script references -->
+    <script src="allowed.js"></script>
+    <script src="words.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
