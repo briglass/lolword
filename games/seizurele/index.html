@@ -160,6 +160,12 @@
             75% { transform: translate(2px, -2px) rotate(-0.5deg); }
             100% { transform: translate(-2px, 1px) rotate(0.5deg); }
         }
+
+        /* Hide empty ad card wrappers if Google Ads are blocked or unfilled */
+        .ad-card:not(:has(ins.adsbygoogle[data-adsbygoogle-status="done"])),
+        .ad-card:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between overflow-hidden select-none">
@@ -224,7 +230,7 @@
     </footer>
 
     <!-- AdSense ad unit -->
-    <div class="w-full max-w-lg mx-auto px-4 mt-6 mb-6 z-10">
+    <div class="w-full max-w-lg mx-auto px-4 mt-6 mb-6 z-10 ad-card">
       <div class="bg-slate-900/95 border border-slate-700 rounded-3xl p-4 text-center">
         <ins class="adsbygoogle"
              style="display:block"
