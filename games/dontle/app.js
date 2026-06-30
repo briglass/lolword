@@ -428,8 +428,8 @@ shareButton.addEventListener('click', () => {
 
     const titleText = gameOutcome === 'win' ? 'DONTLE - WIN 🏆' : 'DONTLE - LOSS 💥';
     const messageText = gameOutcome === 'win' 
-        ? 'Resisted the urge to play and successfully did not play.' 
-        : 'Failed to resist. Entered a word.';
+        ? `Resisted the urge to play and successfully did not play. Current Streak: ${stats.streak}` 
+        : `Failed to resist. Entered a word. Current Streak: ${stats.streak}`;
 
     // Generate 6 rows of word response emoji blocks to look like Wordle
     let gridEmojis = '';
