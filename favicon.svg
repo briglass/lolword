@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Definitions for gradients and patterns -->
+  <defs>
+    <!-- Background Silly Purple Gradient -->
+    <radialGradient id="faceGrad" cx="45%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#d8b4fe" /> <!-- Light Purple -->
+      <stop offset="70%" stop-color="#a855f7" /> <!-- Medium Silly Purple -->
+      <stop offset="100%" stop-color="#701a75" /> <!-- Dark purple shadow -->
+    </radialGradient>
+    
+    <!-- Mouth Gradient -->
+    <linearGradient id="mouthGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4c0519" /> <!-- Dark burgundy/rose mouth void -->
+      <stop offset="100%" stop-color="#1c000a" />
+    </linearGradient>
+
+    <!-- Tongue Gradient -->
+    <linearGradient id="tongueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185" /> <!-- Bright silly rose pink -->
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+
+    <!-- Scanlines pattern -->
+    <pattern id="scanlinePattern" width="512" height="12" patternUnits="userSpaceOnUse">
+      <rect width="512" height="4" fill="#000000" fill-opacity="0.25" />
+    </pattern>
+  </defs>
+
+  <!-- Face circle -->
+  <circle cx="256" cy="256" r="230" fill="url(#faceGrad)" stroke="#000000" stroke-width="16" />
+
+  <!-- Mouth -->
+  <!-- Rounded, happy, goofy smiley mouth -->
+  <path d="M 110 240 Q 256 220 402 240 Q 420 400 256 420 Q 92 400 110 240 Z" fill="url(#mouthGrad)" stroke="#000000" stroke-width="14" stroke-linejoin="round" />
+
+  <!-- Tongue -->
+  <!-- Floppy, happy tongue sticking straight down/out -->
+  <path d="M 180 300 Q 256 290 332 300 Q 345 440 256 450 Q 167 440 180 300 Z" fill="url(#tongueGrad)" stroke="#000000" stroke-width="12" />
+  <!-- Tongue crease -->
+  <path d="M 256 315 L 256 425" stroke="#be123c" stroke-width="8" stroke-linecap="round" />
+
+  <!-- Left Eye (Extremely Googly/Derp, large and round) -->
+  <circle cx="165" cy="155" r="70" fill="#ffffff" stroke="#000000" stroke-width="12" />
+  <!-- Pupil looking straight up-right -->
+  <circle cx="190" cy="125" r="24" fill="#000000" />
+  <circle cx="200" cy="115" r="8" fill="#ffffff" /> <!-- Highlight -->
+
+  <!-- Right Eye (Mismatched super-googly derp eye, tilted slightly) -->
+  <circle cx="340" cy="165" r="55" fill="#ffffff" stroke="#000000" stroke-width="12" />
+  <!-- Pupil looking way down-left/cross-eyed -->
+  <circle cx="315" cy="180" r="18" fill="#000000" />
+  <circle cx="320" cy="175" r="6" fill="#ffffff" /> <!-- Highlight -->
+
+  <!-- Cheek details / Rosy blush -->
+  <ellipse cx="95" cy="225" rx="18" ry="10" fill="#f472b6" fill-opacity="0.7" transform="rotate(-10 95 225)" />
+  <ellipse cx="415" cy="225" rx="18" ry="10" fill="#f472b6" fill-opacity="0.7" transform="rotate(10 415 225)" />
+
+  <!-- Scanlines overlay (matches the retro CRT aesthetic perfectly) -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#scanlinePattern)" pointer-events="none" />
+</svg>

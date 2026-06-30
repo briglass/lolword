@@ -1,6 +1,6 @@
 # SEIZURELE
 
-A classic, barebones Wordle clone built as a static web app.
+A classic, barebones word game built as a static web app.
 
 ## Features
 
@@ -28,6 +28,6 @@ Open `index.html` in your browser, or serve with a static file server.
 ## Files
 
 - `index.html` — main page and UI layout
-- `app.js` — Wordle game logic, timer, and share support
+- `app.js` — Word game logic, timer, and share support
 - `allowed.txt` — source list for valid guesses
 - `words.js` — answer list for today’s solution
