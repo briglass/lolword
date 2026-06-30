@@ -16,6 +16,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LOLWORD - Surreal Word Games</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Suppress Tailwind Play CDN Warning -->
+  <script>
+    (function() {
+      const originalWarn = console.warn;
+      console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+          return;
+        }
+        originalWarn.apply(console, args);
+      };
+    })();
+  </script>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -339,8 +351,26 @@
       }
     }
 
+    // Proactively unlock AudioContext on first real user gesture
+    function unlockAudio() {
+      try {
+        initAudio();
+        if (audioCtx && audioCtx.state === 'running') {
+          window.removeEventListener('click', unlockAudio);
+          window.removeEventListener('keydown', unlockAudio);
+          window.removeEventListener('touchstart', unlockAudio);
+        }
+      } catch (e) {
+        // Ignore unlock errors
+      }
+    }
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+
     // Play buzz sound (Brundlefly style)
-    function playFlyBuzz(duration = 0.5) {
+    function playFlyBuzz(duration = 0.5, forceInit = false) {
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
         const osc = audioCtx.createOscillator();
@@ -375,7 +405,8 @@
     }
 
     // Play Goldblum-esque retro synth chord
-    function playGoldblumChime() {
+    function playGoldblumChime(forceInit = false) {
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
         const now = audioCtx.currentTime;
@@ -404,7 +435,8 @@
     }
 
     // Play spooky skull void drop
-    function playSpookyDrop() {
+    function playSpookyDrop(forceInit = false) {
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
         const now = audioCtx.currentTime;
@@ -468,15 +500,15 @@
       el.addEventListener('click', (e) => {
         e.stopPropagation();
         if (el.textContent === '🪰') {
-          playFlyBuzz(0.3);
+          playFlyBuzz(0.3, true);
           el.textContent = '💥';
           setTimeout(() => el.remove(), 200);
         } else if (el.textContent === '🕶️') {
-          playGoldblumChime();
+          playGoldblumChime(true);
           el.textContent = '✨';
           setTimeout(() => el.remove(), 200);
         } else if (el.textContent === '💀') {
-          playSpookyDrop();
+          playSpookyDrop(true);
           el.textContent = '💨';
           setTimeout(() => el.remove(), 200);
         } else {
