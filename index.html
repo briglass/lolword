@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOLWORD - The Absurdist Wordle Hub</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts for Surreal Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Creepster&family=Rubik+Glitch&family=Space+Grotesk:wght@400;700;900&family=Syne:wght@800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Wild, animated, changing gradient background */
+    @keyframes wildBg {
+      0% {
+        background-position: 0% 50%;
+      }
+      25% {
+        background-position: 50% 100%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      75% {
+        background-position: 50% 0%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes hueShift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    body {
+      background: linear-gradient(
+        135deg,
+        #ff007f,
+        #7f00ff,
+        #00ffff,
+        #00ff00,
+        #ffff00,
+        #ff8000,
+        #ff0000,
+        #ff00ff
+      );
+      background-size: 800% 800%;
+      animation: wildBg 15s ease infinite, hueShift 25s linear infinite;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* CRT scanlines effect for retro-cyber-surrealism */
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 4px, 6px 100%;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    /* Glitch effect for titles */
+    .glitch-title {
+      font-family: 'Rubik Glitch', sans-serif;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8), 5px 5px 0px #ff00ff, -5px -5px 0px #00ffff;
+      animation: textPulsate 2s infinite alternate;
+    }
+
+    @keyframes textPulsate {
+      0% {
+        transform: scale(1) skewX(0deg);
+      }
+      50% {
+        transform: scale(1.02) skewX(2deg);
+      }
+      100% {
+        transform: scale(0.98) skewX(-2deg);
+      }
+    }
+
+    /* Wobble animation for icons/buttons */
+    @keyframes slimeWobble {
+      0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+      34% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
+      67% { border-radius: 50% 60% 30% 70% / 60% 30% 70% 40%; }
+    }
+
+    .slime-shape {
+      animation: slimeWobble 6s ease-in-out infinite;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #111;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff00ff;
+      border: 3px solid #111;
+      border-radius: 6px;
+    }
+
+    /* Floating fly or sunglasses styling */
+    .floating-item {
+      position: absolute;
+      pointer-events: auto;
+      z-index: 40;
+      transition: transform 0.1s ease;
+      cursor: pointer;
+    }
+
+    /* Custom button retro shadows */
+    .retro-btn {
+      box-shadow: 10px 10px 0px 0px #000000;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .retro-btn:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 14px 14px 0px 0px #000000;
+    }
+    .retro-btn:active {
+      transform: translate(6px, 6px);
+      box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    /* Static background noise */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 998;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-8 selection:bg-yellow-400 selection:text-black">
+  <div class="crt-overlay"></div>
+  <div class="noise"></div>
+
+  <!-- Background Floating Absurdist Items Container -->
+  <div id="ambient-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+  <!-- Main Wrapper -->
+  <main class="w-full max-w-4xl flex-grow flex flex-col justify-center items-center z-10 my-8">
+    
+    <!-- Header -->
+    <header class="text-center mb-12">
+      <div class="inline-block relative">
+        <!-- Weird absolute eyes or details -->
+        <span class="absolute -top-12 -left-12 text-5xl transform -rotate-12 animate-bounce">🤪</span>
+        <span class="absolute -top-12 -right-12 text-5xl transform rotate-12 animate-bounce delay-300">🌀</span>
+        
+        <h1 class="text-7xl md:text-9xl font-black tracking-tighter glitch-title text-white uppercase select-none">
+          LOLWORD
+        </h1>
+      </div>
+      
+      <p class="text-lg md:text-2xl font-bold text-black bg-white py-2 px-6 rounded-full inline-block border-4 border-black mt-4 shadow-[4px_4px_0px_0px_#000] rotate-1">
+        THE SURREALIST HUB OF ABSURDIST WORDLE CLONES
+      </p>
+      
+      <div class="text-sm text-yellow-300 mt-2 font-mono font-bold tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)] uppercase">
+        * Warning: Side effects include linguistic dissolution and fly buzzing *
+      </div>
+    </header>
+
+    <!-- Buttons Grid (2 Columns) -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl px-4">
+      
+      <!-- BUTTON 1: JEFFGOLDBLUMLE -->
+      <a href="https://www.jeffgoldblum.com" target="_blank" rel="noopener noreferrer" 
+         id="btn-jeff"
+         class="retro-btn flex flex-col items-center justify-between text-center p-8 bg-yellow-400 border-4 border-black rounded-3xl group relative overflow-hidden h-80 select-none">
+        <!-- Fun animal pattern background that appears on hover -->
+        <div class="absolute inset-0 bg-[radial-gradient(#eab308_20%,transparent_20%)] [background-size:16px_16px] opacity-20 group-hover:scale-110 transition-transform duration-500"></div>
+        
+        <!-- Header tag inside button -->
+        <span class="z-10 bg-black text-yellow-400 text-xs px-3 py-1 font-mono rounded-full uppercase border-2 border-yellow-400 tracking-wider">
+          Now Flying...
+        </span>
+
+        <!-- SVG Sunglasses Icon (Custom Absurdist) -->
+        <div class="z-10 my-4 transform group-hover:rotate-12 group-hover:scale-125 transition-all duration-300 flex justify-center items-center">
+          <div class="w-24 h-24 bg-black text-white p-4 rounded-full flex items-center justify-center border-4 border-white shadow-[4px_4px_0px_0px_#000]">
+            <i data-lucide="glasses" class="w-16 h-16 stroke-[2.5] text-yellow-400"></i>
+          </div>
+        </div>
+
+        <!-- Button Info -->
+        <div class="z-10">
+          <h2 class="text-3xl font-black text-black tracking-tight uppercase group-hover:text-white transition-colors duration-200">
+            JEFFGOLDBLUMLE
+          </h2>
+          <p class="text-sm font-bold text-black/80 mt-1 font-mono italic">
+            "Life, uh... finds a 12-letter word."
+          </p>
+        </div>
+      </a>
+
+      <!-- BUTTON 2: BRUNDLE -->
+      <a href="https://www.brundle.co" target="_blank" rel="noopener noreferrer"
+         id="btn-brundle"
+         class="retro-btn flex flex-col items-center justify-between text-center p-8 bg-emerald-500 border-4 border-black rounded-3xl group relative overflow-hidden h-80 select-none">
+        <!-- Slime pattern background that appears on hover -->
+        <div class="absolute inset-0 bg-[linear-gradient(45deg,#059669_25%,transparent_25%,transparent_75%,#059669_75%,#059669),linear-gradient(45deg,#059669_25%,transparent_25%,transparent_75%,#059669_75%,#059669)] [background-size:20px_20px] [background-position:0_0,10px_10px] opacity-20 group-hover:scale-110 transition-transform duration-500"></div>
+        
+        <!-- Header tag inside button -->
+        <span class="z-10 bg-black text-emerald-300 text-xs px-3 py-1 font-mono rounded-full uppercase border-2 border-emerald-400 tracking-wider">
+          Mutant Danger!
+        </span>
+
+        <!-- SVG Fly Icon (Absurdist Custom Fly icon built with lucide/styling) -->
+        <div class="z-10 my-4 transform group-hover:-rotate-12 group-hover:scale-125 transition-all duration-300 flex justify-center items-center">
+          <div class="w-24 h-24 bg-black text-white p-4 rounded-full flex items-center justify-center border-4 border-emerald-400 slime-shape shadow-[4px_4px_0px_0px_#000]">
+            <!-- Custom fly styling: Lucide bug with animated wings or styling -->
+            <div class="relative">
+              <i data-lucide="bug" class="w-14 h-14 stroke-[2.5] text-emerald-400"></i>
+              <!-- Miniature Fly wings -->
+              <span class="absolute -top-2 -left-2 text-xl animate-ping opacity-75">🪰</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button Info -->
+        <div class="z-10">
+          <h2 class="text-3xl font-black text-black tracking-tight uppercase group-hover:text-emerald-950 transition-colors duration-200">
+            BRUNDLE
+          </h2>
+          <p class="text-sm font-bold text-black/80 mt-1 font-mono italic">
+            "Be afraid. Be very, very afraid."
+          </p>
+        </div>
+      </a>
+
+      <!-- BUTTON 3: COMING SOON -->
+      <div id="btn-soon"
+           class="retro-btn flex flex-col items-center justify-between text-center p-8 bg-zinc-900 border-4 border-black rounded-3xl group relative overflow-hidden h-80 col-span-1 md:col-span-2 select-none">
+        <!-- Matrix/glitch pattern background -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[size:100%_8px] opacity-40"></div>
+        
+        <!-- Header tag inside button -->
+        <span class="z-10 bg-red-600 text-white text-xs px-4 py-1 font-mono rounded-full uppercase border-2 border-white tracking-widest animate-pulse">
+          Locked Void
+        </span>
+
+        <!-- Skull Icon -->
+        <div class="z-10 my-4 transform group-hover:rotate-180 group-hover:scale-125 transition-all duration-500 flex justify-center items-center">
+          <div class="w-24 h-24 bg-red-600 text-white p-4 rounded-full flex items-center justify-center border-4 border-black shadow-[4px_4px_0px_0px_#000] animate-bounce">
+            <i data-lucide="skull" class="w-14 h-14 stroke-[2.5] text-white"></i>
+          </div>
+        </div>
+
+        <!-- Button Info -->
+        <div class="z-10 flex flex-col items-center">
+          <h2 class="text-3xl font-black text-red-500 tracking-wider uppercase font-['Creepster']">
+            COMING SOON
+          </h2>
+          <!-- Countdown display in seconds -->
+          <div class="mt-2 px-4 py-1.5 bg-black/60 border-2 border-red-500 rounded-xl font-mono font-black text-xl md:text-2xl text-red-400 tracking-widest shadow-[inset_0_0_10px_rgba(239,68,68,0.5)]">
+            <span id="countdown-seconds">00000000</span> SECONDS
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full text-center py-4 font-mono text-sm text-black bg-white/70 border-t-4 border-black rounded-t-xl py-2 px-4 z-10 select-none">
+    <p class="font-bold">
+      LOLWORD Hub &copy; 2026.
+    </p>
+    <p class="text-xs text-gray-800 mt-1">
+      No flies were harmed in the making of these clones.
+    </p>
+  </footer>
+
+  <!-- Sound FX / Interactive Scripts -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Custom sound synthesizer via Web Audio API to prevent external resource problems
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioCtx();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Play buzz sound (Brundlefly style)
+    function playFlyBuzz(duration = 0.5) {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, audioCtx.currentTime); // Low bass buzz
+        osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + duration);
+
+        // Flapping/vibrato modulation
+        const mod = audioCtx.createOscillator();
+        const modGain = audioCtx.createGain();
+        mod.frequency.value = 35; // 35 wingbeats per second
+        modGain.gain.value = 40; // modulate frequency by 40Hz
+        
+        mod.connect(modGain);
+        modGain.connect(osc.frequency);
+        
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        mod.start();
+        osc.stop(audioCtx.currentTime + duration);
+        mod.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio Context not allowed yet", e);
+      }
+    }
+
+    // Play Goldblum-esque retro synth chord
+    function playGoldblumChime() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const notes = [261.63, 329.63, 392.00, 523.25]; // C major chord
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+          osc.frequency.exponentialRampToValueAtTime(freq * 2, now + 0.5);
+          
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.08, now + (idx * 0.08) + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.start(now);
+          osc.stop(now + 1.2);
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Play spooky skull void drop
+    function playSpookyDrop() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 1.0);
+        
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(now);
+        osc.stop(now + 1.0);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Bind Sound FX to hover/actions
+    document.getElementById('btn-jeff').addEventListener('mouseenter', playGoldblumChime);
+    document.getElementById('btn-brundle').addEventListener('mouseenter', () => playFlyBuzz(0.8));
+    document.getElementById('btn-soon').addEventListener('mouseenter', playSpookyDrop);
+
+    // Create floating flies and sunglasses in ambient container
+    const ambientContainer = document.getElementById('ambient-container');
+    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨'];
+
+    function spawnAmbientItem() {
+      if (document.hidden) return;
+      const el = document.createElement('div');
+      el.className = 'floating-item text-4xl select-none';
+      el.textContent = itemsList[Math.floor(Math.random() * itemsList.length)];
+      
+      const x = Math.random() * 100;
+      const startY = 110; // start below screen
+      const endY = -10; // end above screen
+      const duration = 8 + Math.random() * 12; // 8-20s
+      const rotation = Math.random() * 360;
+      const scale = 0.5 + Math.random() * 1.5;
+
+      el.style.left = `${x}%`;
+      el.style.top = `${startY}%`;
+      el.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+      el.style.transition = `top ${duration}s linear, left ${duration}s ease-in-out, transform ${duration}s linear`;
+      
+      ambientContainer.appendChild(el);
+
+      // Trigger movement shortly after append
+      setTimeout(() => {
+        el.style.top = `${endY}%`;
+        el.style.left = `${x + (Math.random() * 20 - 10)}%`;
+        el.style.transform = `scale(${scale}) rotate(${rotation + (Math.random() * 720 - 360)}deg)`;
+      }, 50);
+
+      // Interaction on click
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (el.textContent === '🪰') {
+          playFlyBuzz(0.3);
+          el.textContent = '💥';
+          setTimeout(() => el.remove(), 200);
+        } else if (el.textContent === '🕶️') {
+          playGoldblumChime();
+          el.textContent = '✨';
+          setTimeout(() => el.remove(), 200);
+        } else if (el.textContent === '💀') {
+          playSpookyDrop();
+          el.textContent = '💨';
+          setTimeout(() => el.remove(), 200);
+        } else {
+          el.textContent = '💥';
+          setTimeout(() => el.remove(), 200);
+        }
+      });
+
+      // Cleanup
+      setTimeout(() => {
+        el.remove();
+      }, duration * 1000 + 100);
+    }
+
+    // Spawn ambient items periodically
+    setInterval(spawnAmbientItem, 2000);
+    for (let i = 0; i < 5; i++) {
+      // Spawn initial elements at various heights
+      setTimeout(() => {
+        if (document.hidden) return;
+        const el = document.createElement('div');
+        el.className = 'floating-item text-3xl select-none';
+        el.textContent = itemsList[Math.floor(Math.random() * itemsList.length)];
+        const x = Math.random() * 100;
+        const y = Math.random() * 80 + 10;
+        el.style.left = `${x}%`;
+        el.style.top = `${y}%`;
+        el.style.transform = `rotate(${Math.random() * 360}deg)`;
+        ambientContainer.appendChild(el);
+        // drift up
+        setTimeout(() => {
+          el.style.transition = 'all 10s linear';
+          el.style.top = '-20%';
+        }, 100);
+        setTimeout(() => el.remove(), 10500);
+      }, i * 800);
+    }
+
+    // Countdown to Midnight Pacific Time, July 4, 2026 (UTC-7)
+    const targetDate = new Date('2026-07-04T00:00:00-07:00');
+    const countdownEl = document.getElementById('countdown-seconds');
+
+    function updateCountdown() {
+      const now = new Date();
+      const differenceMs = targetDate - now;
+      const secondsRemaining = Math.max(0, Math.floor(differenceMs / 1000));
+      if (countdownEl) {
+        // Format with thousand separators for extra visual style
+        countdownEl.textContent = secondsRemaining.toLocaleString('en-US');
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
