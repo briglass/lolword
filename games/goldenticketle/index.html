@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" class="min-h-screen">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TQSTTJ00HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GOLDENTICKETLE - Find the Golden Ticket!</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <!-- Suppress Tailwind Play CDN Warning -->
+    <script>
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#fde047',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                        },
+                        chocolate: {
+                            100: '#eddcd2',
+                            200: '#ddb892',
+                            500: '#9c6644',
+                            700: '#7f5539',
+                            800: '#5c3d2e',
+                            900: '#4a2c11',
+                        }
+                    },
+                    animation: {
+                        'pop': 'pop 0.15s ease-in-out',
+                        'flip': 'flip 0.5s ease-in-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'gold-glow': 'goldGlow 2s ease-in-out infinite alternate',
+                        'party-flash': 'partyFlash 1s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        pop: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '40%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        flip: {
+                            '0%': { transform: 'rotateX(0deg)' },
+                            '45%': { transform: 'rotateX(90deg)' },
+                            '55%': { transform: 'rotateX(90deg)' },
+                            '100%': { transform: 'rotateX(0deg)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '15%, 45%, 75%': { transform: 'translateX(-5px)' },
+                            '30%, 60%, 90%': { transform: 'translateX(5px)' },
+                        },
+                        goldGlow: {
+                            '0%': { boxShadow: '0 0 5px rgba(234, 179, 8, 0.4), inset 0 0 5px rgba(234, 179, 8, 0.2)' },
+                            '100%': { boxShadow: '0 0 20px rgba(234, 179, 8, 0.9), inset 0 0 10px rgba(234, 179, 8, 0.5)' }
+                        },
+                        partyFlash: {
+                            '0%, 100%': { backgroundColor: '#4c1d95' }, // violet-900
+                            '33%': { backgroundColor: '#854d0e' }, // yellow-800 (goldish)
+                            '66%': { backgroundColor: '#78350f' }  // amber-900 (chocolatey)
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Creepster&family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .text-gold-neon {
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.6), 0 0 15px rgba(250, 204, 21, 0.3);
+        }
+        /* Grid Tile Golden shimmer effect */
+        .gold-shimmer {
+            background: linear-gradient(135deg, #fef08a 0%, #ca8a04 50%, #eab308 100%);
+            background-size: 200% 200%;
+            animation: shimmerMove 3s linear infinite;
+        }
+        @keyframes shimmerMove {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+        /* Falling Coin/Hat/Ticket Animation Styles */
+        .falling-item {
+            position: fixed;
+            top: -50px;
+            pointer-events: none;
+            z-index: 100;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+        /* Hide empty ad card wrappers if Google Ads are blocked or unfilled */
+        .ad-card:not(:has(ins.adsbygoogle[data-adsbygoogle-status="done"])),
+        .ad-card:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 text-purple-100 min-h-screen flex flex-col justify-between overflow-y-auto select-none transition-colors duration-1000" id="game-body">
+    
+    <!-- Header -->
+    <header class="border-b border-purple-900/60 px-4 py-2 flex items-center justify-between w-full max-w-xl mx-auto shrink-0 z-10">
+        <div class="flex items-center gap-2">
+            <!-- Back to LOLWORD link -->
+            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-purple-300 hover:text-white px-2.5 py-1.5 bg-purple-950/80 border border-purple-800 hover:border-purple-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-yellow-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                BACK TO LOLWORD.COM
+            </a>
+            <button id="btn-help" class="text-purple-300 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                </svg>
+            </button>
+        </div>
+
+        <h1 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-200 bg-clip-text text-transparent select-none cursor-pointer text-gold-neon uppercase" onclick="window.location.reload()">
+            GOLDENTICKETLE
+        </h1>
+
+        <div class="flex items-center gap-2">
+            <button id="btn-stats" class="text-purple-300 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="flex-grow flex flex-col justify-start items-center py-4 px-2 max-w-xl w-full mx-auto relative z-10">
+        
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+        <!-- Subtitle Prompt -->
+        <div class="text-center mb-4 max-w-md">
+            <p class="text-xs sm:text-sm font-semibold tracking-wide text-purple-300">
+                The Chocolate Factory has a daily secret word of <span class="text-yellow-400 font-extrabold text-gold-neon">12 LETTERS</span>.
+            </p>
+            <p class="text-[11px] sm:text-xs text-purple-400 mt-1 italic">
+                You have exactly <span class="text-white font-bold">2 chances</span>. Will today reward you with a Golden Ticket (1 in 1000)?
+            </p>
+        </div>
+
+        <!-- 2x12 Letter Grid -->
+        <div id="grid" class="grid grid-cols-12 grid-rows-2 gap-1 w-full max-w-full sm:max-w-[520px] my-4 px-1" style="min-height: 5.5rem;">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Keyboard Area -->
+    <footer class="w-full max-w-xl mx-auto p-2 pb-6 shrink-0 z-10">
+        <div id="keyboard" class="flex flex-col gap-1.5 sm:gap-2">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+    </footer>
+
+    <!-- AdSense ad unit -->
+    <div class="w-full max-w-xl mx-auto px-4 mt-2 mb-4 z-10 ad-card">
+      <div class="bg-purple-950/70 border border-purple-800 rounded-2xl p-4 text-center">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9509983147297425"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    <!-- MODAL 1: How to Play -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-purple-900 border border-purple-700 text-purple-100 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-purple-800 flex justify-between items-center bg-purple-950/60">
+                <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2 text-gold-neon">
+                    🎫 How To Play GOLDENTICKETLE
+                </h2>
+                <button class="modal-close text-purple-300 hover:text-white transition-colors focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-purple-200 leading-relaxed max-h-[60vh] overflow-y-auto">
+                <p>Step inside the mysterious sweet factory! Every day, there is a secret <span class="font-extrabold text-white text-gold-neon">12-LETTER</span> word.</p>
+                <p>The word is either:</p>
+                <ul class="list-disc pl-5 space-y-1.5 font-bold">
+                    <li class="text-yellow-400 text-gold-neon">GOLDENTICKET <span class="text-xs font-normal text-purple-300">(1 in 1000 chance today!)</span></li>
+                    <li class="text-amber-500">CHOCOLATEBAR <span class="text-xs font-normal text-purple-300">(999 in 1000 chance today)</span></li>
+                </ul>
+                <p>You have exactly <span class="text-white font-bold underline">2 CHANCES</span> to enter any 12-letter words and hit ENTER.</p>
+                <p>After each guess, the tiles will change colors to show how close your letters were to the target:</p>
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 bg-amber-800 border border-amber-600 rounded flex items-center justify-center font-bold text-white">C</div>
+                        <span>Green / Brown means the letter is correct and in the exact spot.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 bg-amber-600 border border-amber-500 rounded flex items-center justify-center font-bold text-white font-bold">P</div>
+                        <span>Caramel / Orange means the letter is in the word but in a different spot.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 bg-zinc-700 border border-zinc-600 rounded flex items-center justify-center font-bold text-zinc-300">A</div>
+                        <span>Grey means the letter is not in the word at all.</span>
+                    </div>
+                </div>
+                <hr class="border-purple-800 my-4" />
+                <p class="text-xs text-purple-300 italic">Play once per day. Reset occurs at your local midnight. Good luck!</p>
+            </div>
+            <div class="p-6 bg-purple-950/40 border-t border-purple-800 flex justify-end">
+                <button class="modal-close px-5 py-2 bg-yellow-500 hover:bg-yellow-400 font-extrabold text-purple-950 rounded-xl transition-colors shadow-lg shadow-yellow-500/20 text-sm focus:outline-none">
+                    Unleash My Luck!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Statistics & Game Over -->
+    <div id="modal-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-purple-900 border border-purple-700 text-purple-100 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-purple-800 flex justify-between items-center bg-purple-950/60">
+                <h2 id="stats-title" class="text-xl font-bold tracking-tight text-white text-gold-neon">Golden Status</h2>
+                <button class="modal-close text-purple-300 hover:text-white transition-colors focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <!-- Status Banner -->
+                <div id="status-banner" class="p-4 rounded-xl border text-center font-bold text-lg select-none">
+                    <!-- Dynamic text: Won or Loss -->
+                </div>
+
+                <!-- Stats grid -->
+                <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                    <div class="bg-purple-950/80 p-2.5 rounded-xl border border-purple-800">
+                        <div id="stat-played" class="text-xl font-extrabold text-white">0</div>
+                        <div class="text-[9px] uppercase tracking-wider font-semibold text-purple-300 mt-1">Played</div>
+                    </div>
+                    <div class="bg-purple-950/80 p-2.5 rounded-xl border border-purple-800">
+                        <div id="stat-winpct" class="text-xl font-extrabold text-white">0%</div>
+                        <div class="text-[9px] uppercase tracking-wider font-semibold text-purple-300 mt-1">Win %</div>
+                    </div>
+                    <div class="bg-purple-950/80 p-2.5 rounded-xl border border-purple-800">
+                        <div id="stat-streak" class="text-xl font-extrabold text-white">0</div>
+                        <div class="text-[9px] uppercase tracking-wider font-semibold text-purple-300 mt-1">Streak</div>
+                    </div>
+                    <div class="bg-purple-950/80 p-2.5 rounded-xl border border-purple-800">
+                        <div id="stat-maxstreak" class="text-xl font-extrabold text-white">0</div>
+                        <div class="text-[9px] uppercase tracking-wider font-semibold text-purple-300 mt-1">Max Streak</div>
+                    </div>
+                </div>
+
+                <!-- Specific rewards breakdown -->
+                <div class="grid grid-cols-2 gap-3 text-center text-xs">
+                    <div class="bg-amber-950/40 p-3 rounded-xl border border-amber-900/60">
+                        <div class="text-[10px] uppercase font-bold text-amber-400">🍫 Chocolate Bars Won</div>
+                        <div id="stat-chocolate" class="text-2xl font-black text-amber-200 mt-1">0</div>
+                    </div>
+                    <div class="bg-yellow-950/40 p-3 rounded-xl border border-yellow-900/60">
+                        <div class="text-[10px] uppercase font-bold text-yellow-400 text-gold-neon">🎫 Golden Tickets Won</div>
+                        <div id="stat-gold" class="text-2xl font-black text-yellow-300 text-gold-neon mt-1">0</div>
+                    </div>
+                </div>
+
+                <!-- Action section (Share) -->
+                <div class="flex items-center gap-4 bg-purple-950/80 p-4 rounded-xl border border-purple-800">
+                    <div class="flex-grow flex flex-col justify-center items-center py-1">
+                        <p id="share-info-text" class="text-xs text-purple-300 mb-2 font-medium">Show the world your sweet prize!</p>
+                        <button id="btn-share" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-yellow-500 hover:bg-yellow-400 font-extrabold text-purple-950 rounded-xl transition-colors shadow-lg shadow-yellow-500/20 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                            SHARE FACTORY RECORD
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-purple-950/40 border-t border-purple-800 flex justify-between items-center text-xs">
+                <button id="btn-reset-stats" class="text-purple-400 hover:text-rose-400 font-medium transition-colors focus:outline-none">
+                    Reset Factory Stats
+                </button>
+                <button id="btn-play-again" class="px-5 py-2.5 bg-purple-950/90 border border-purple-800 hover:bg-purple-800 font-bold text-white rounded-xl transition-colors focus:outline-none">
+                    Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Script references: point directly to the seizurele ones for DRY lists, then our app.js -->
+    <script src="app.js"></script>
+    <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
+    <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
+</body>
+</html>

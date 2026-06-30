@@ -295,7 +295,40 @@
         </div>
       </a>
 
-      <!-- BUTTON 3: DONTLE -->
+      <!-- BUTTON 3: GOLDENTICKETLE -->
+      <a href="games/goldenticketle/index.html"
+         id="btn-goldenticketle"
+         class="col-span-2 retro-btn flex flex-row items-center justify-between text-left p-4 sm:p-6 md:p-8 bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 border-4 border-black rounded-3xl group relative overflow-hidden h-44 sm:h-48 select-none">
+        <!-- Golden Ticket shiny background effect on hover -->
+        <div class="absolute inset-0 bg-[radial-gradient(#fde047_15%,transparent_15%)] [background-size:12px_12px] opacity-25 group-hover:scale-125 transition-transform duration-700"></div>
+        
+        <div class="z-10 flex flex-col justify-between h-full max-w-[65%]">
+          <!-- Header tag inside button -->
+          <span class="w-fit bg-purple-950 text-yellow-300 text-[10px] sm:text-xs px-2.5 py-1 font-mono font-bold rounded-full uppercase border-2 border-yellow-300 tracking-wider">
+            1 in 1000 Golden jackpot!
+          </span>
+          <div>
+            <h2 class="text-xl sm:text-3xl md:text-4xl font-black text-purple-950 tracking-tight uppercase group-hover:text-black transition-colors duration-200 font-['Space_Grotesk']">
+              GOLDENTICKETLE
+            </h2>
+            <p class="text-[10px] sm:text-xs md:text-sm font-bold text-purple-900 mt-1 font-mono italic leading-snug">
+              "2 chances to guess the secret word. Will today be your Golden Ticket day?"
+            </p>
+          </div>
+        </div>
+
+        <!-- SVG Ticket Icon -->
+        <div class="z-10 transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-300 flex justify-center items-center mr-2 sm:mr-4">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-purple-950 text-yellow-400 p-4 rounded-3xl flex items-center justify-center border-4 border-yellow-300 shadow-[6px_6px_0px_0px_#000]">
+            <div class="relative">
+              <i data-lucide="ticket" class="w-12 h-12 sm:w-16 sm:h-16 stroke-[2.5] text-yellow-300"></i>
+              <span class="absolute -top-1.5 -right-1.5 text-lg sm:text-2xl animate-bounce">🎫</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- BUTTON 4: DONTLE -->
       <a href="games/dontle/index.html"
          id="btn-dontle"
          class="retro-btn flex flex-col items-center justify-between text-center p-4 sm:p-6 md:p-8 bg-rose-600 border-4 border-black rounded-3xl group relative overflow-hidden h-64 sm:h-72 md:h-80 select-none">
@@ -555,9 +588,35 @@
       }
     }
 
+    // Play whimsical golden ticket fanfare for hover
+    function playGoldenFanfare(forceInit = false) {
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const notes = [329.63, 392.00, 523.25, 659.25, 783.99]; // E G C E G sweet arpeggio
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.06, now + (idx * 0.08) + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.8);
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     // Bind Sound FX to hover/actions
     document.getElementById('btn-jeff').addEventListener('mouseenter', playGoldblumChime);
     document.getElementById('btn-brundle').addEventListener('mouseenter', () => playFlyBuzz(0.8));
+    document.getElementById('btn-goldenticketle').addEventListener('mouseenter', playGoldenFanfare);
     document.getElementById('btn-dontle').addEventListener('mouseenter', playWarningAlarm);
     document.getElementById('btn-soon').addEventListener('mouseenter', playSpookyDrop);
 
