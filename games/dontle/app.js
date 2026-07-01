@@ -158,7 +158,7 @@ function createBoard() {
         for (let col = 0; col < WORD_LENGTH; col += 1) {
             const tile = document.createElement('div');
             tile.id = `tile-${row}-${col}`;
-            tile.className = 'w-full aspect-square border border-zinc-800 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-extrabold tracking-[0.35em] uppercase select-none bg-zinc-900 text-zinc-50 transition-all duration-300';
+            tile.className = 'w-full aspect-square border border-zinc-600 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-extrabold tracking-[0.35em] uppercase select-none bg-zinc-800 text-zinc-50 transition-all duration-300';
             gridElement.appendChild(tile);
         }
     }
@@ -198,16 +198,16 @@ function handleKey(key) {
             currentCol -= 1;
             const tile = document.getElementById(`tile-${currentRow}-${currentCol}`);
             tile.textContent = '';
-            tile.classList.remove('border-zinc-500', 'scale-105');
-            tile.classList.add('border-zinc-800');
+            tile.classList.remove('border-zinc-400', 'scale-105');
+            tile.classList.add('border-zinc-600');
             currentGuess = currentGuess.slice(0, -1);
         }
     } else if (/^[A-Z]$/.test(key.toUpperCase())) {
         if (currentCol < WORD_LENGTH) {
             const tile = document.getElementById(`tile-${currentRow}-${currentCol}`);
             tile.textContent = key.toUpperCase();
-            tile.classList.remove('border-zinc-800');
-            tile.classList.add('border-zinc-500', 'scale-105');
+            tile.classList.remove('border-zinc-600');
+            tile.classList.add('border-zinc-400', 'scale-105');
             currentGuess += key.toUpperCase();
             currentCol += 1;
         }
