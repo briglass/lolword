@@ -728,7 +728,7 @@ shareButton.addEventListener('click', () => {
         prizeMessage = `The database locked me out. No prizes today. Current Streak: ${stats.streak}`;
     }
 
-    const shareText = `${titleText}\n\n${gridEmojis}\n${prizeMessage}\n\nhttps://lolword.com/games/goldenticketle/`;
+    const shareText = `${titleText}\n\n${gridEmojis}\n${prizeMessage}\n\nhttps://brundle.co?utm_source=lolword&utm_medium=referral&utm_campaign=partner`;
 
     if (navigator.clipboard) {
         navigator.clipboard.writeText(shareText).then(() => {
