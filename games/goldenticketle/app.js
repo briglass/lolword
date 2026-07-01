@@ -270,14 +270,15 @@ function createKeyboard() {
     keyboardElement.innerHTML = '';
     keyboardLayout.forEach((row) => {
         const rowEl = document.createElement('div');
-        rowEl.className = 'flex justify-center gap-1 sm:gap-1.5';
+        rowEl.className = 'flex justify-center gap-1 sm:gap-1.5 w-full px-1';
         row.forEach((key) => {
             const keyButton = document.createElement('button');
             keyButton.textContent = key;
             keyButton.dataset.key = key;
-            keyButton.className = 'min-w-[24px] sm:min-w-[38px] h-11 sm:h-14 rounded-lg bg-purple-900/60 text-purple-100 font-bold shadow-md hover:bg-purple-800 transition-colors focus:outline-none active:scale-[0.98] text-xs sm:text-base border border-purple-800/40';
-            if (key === 'ENTER') keyButton.classList.add('min-w-[48px]', 'sm:min-w-[64px]', 'text-[10px]', 'sm:text-sm');
-            if (key === 'BACK') keyButton.classList.add('min-w-[48px]', 'sm:min-w-[64px]', 'text-[10px]', 'sm:text-sm');
+            // Removed min-w-[24px] and instead used flex-1 with max-widths to perfectly scale and span full browser widths automatically
+            keyButton.className = 'flex-1 max-w-[46px] h-11 sm:h-14 rounded-lg bg-purple-900/60 text-purple-100 font-bold shadow-md hover:bg-purple-800 transition-colors focus:outline-none active:scale-[0.98] text-xs sm:text-base border border-purple-800/40';
+            if (key === 'ENTER') keyButton.className = 'flex-[1.5] max-w-[68px] h-11 sm:h-14 rounded-lg bg-purple-900/60 text-purple-100 font-bold shadow-md hover:bg-purple-800 transition-colors focus:outline-none active:scale-[0.98] text-[10px] sm:text-sm border border-purple-800/40';
+            if (key === 'BACK') keyButton.className = 'flex-[1.5] max-w-[68px] h-11 sm:h-14 rounded-lg bg-purple-900/60 text-purple-100 font-bold shadow-md hover:bg-purple-800 transition-colors focus:outline-none active:scale-[0.98] text-[10px] sm:text-sm border border-purple-800/40';
             keyButton.addEventListener('click', () => handleKey(key));
             rowEl.appendChild(keyButton);
         });
