@@ -203,6 +203,13 @@
   <!-- Background Floating Absurdist Items Container -->
   <div id="ambient-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
 
+  <!-- Absolute Mute Toggle Button at top right -->
+  <div class="fixed top-4 right-4 z-[10000] select-none">
+    <button id="btn-mute-toggle" class="p-3 bg-white text-black border-4 border-black rounded-full hover:bg-zinc-200 active:scale-95 transition-all shadow-[4px_4px_0px_0px_#000] focus:outline-none flex items-center justify-center cursor-pointer" aria-label="Toggle Sound" title="Toggle Sound">
+      <i data-lucide="mic-off" id="mute-icon" class="w-6 h-6 stroke-[3]"></i>
+    </button>
+  </div>
+
   <!-- Main Wrapper -->
   <main class="w-full max-w-4xl flex-grow flex flex-col justify-center items-center z-10 my-8">
     
@@ -439,11 +446,15 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
+    // Default to MUTED state as requested
+    let isMuted = true;
+
     // Custom sound synthesizer via Web Audio API to prevent external resource problems
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
     function initAudio() {
+      if (isMuted) return; // Block synthesizer initialization/resuming if muted
       if (!audioCtx) {
         audioCtx = new AudioCtx();
       }
@@ -454,6 +465,7 @@
 
     // Proactively unlock AudioContext on first real user gesture
     function unlockAudio() {
+      if (isMuted) return;
       try {
         initAudio();
         if (audioCtx && audioCtx.state === 'running') {
@@ -469,8 +481,43 @@
     window.addEventListener('keydown', unlockAudio);
     window.addEventListener('touchstart', unlockAudio);
 
+    // Mute/Unmute Toggle Controller
+    const btnMuteToggle = document.getElementById('btn-mute-toggle');
+    const muteIcon = document.getElementById('mute-icon');
+
+    // Set initial accessible labels for mute toggle
+    btnMuteToggle.setAttribute('aria-label', 'Unmute sound');
+    btnMuteToggle.setAttribute('title', 'Unmute sound');
+
+    btnMuteToggle.addEventListener('click', () => {
+      isMuted = !isMuted;
+      
+      // Update Lucide Icon (Using mic & mic-off as requested)
+      if (isMuted) {
+        muteIcon.setAttribute('data-lucide', 'mic-off');
+        btnMuteToggle.setAttribute('aria-label', 'Unmute sound');
+        btnMuteToggle.setAttribute('title', 'Unmute sound');
+      } else {
+        muteIcon.setAttribute('data-lucide', 'mic');
+        btnMuteToggle.setAttribute('aria-label', 'Mute sound');
+        btnMuteToggle.setAttribute('title', 'Mute sound');
+        // Instantly initialize and trigger a sound test once unmuted
+        try {
+          initAudio();
+          if (audioCtx) {
+            audioCtx.resume();
+          }
+          playGoldenFanfare(true);
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+      lucide.createIcons();
+    });
+
     // Play buzz sound (Brundlefly style)
     function playFlyBuzz(duration = 0.5, forceInit = false) {
+      if (isMuted) return;
       if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
@@ -507,6 +554,7 @@
 
     // Play Goldblum-esque retro synth chord
     function playGoldblumChime(forceInit = false) {
+      if (isMuted) return;
       if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
@@ -537,6 +585,7 @@
 
     // Play spooky skull void drop
     function playSpookyDrop(forceInit = false) {
+      if (isMuted) return;
       if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
@@ -563,6 +612,7 @@
 
     // Play warning alarm buzz for DONTLE
     function playWarningAlarm(forceInit = false) {
+      if (isMuted) return;
       if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
@@ -590,6 +640,7 @@
 
     // Play whimsical golden ticket fanfare for hover
     function playGoldenFanfare(forceInit = false) {
+      if (isMuted) return;
       if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
       try {
         initAudio();
@@ -622,7 +673,7 @@
 
     // Create floating flies and sunglasses in ambient container
     const ambientContainer = document.getElementById('ambient-container');
-    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨'];
+    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨', '🍫', '🎫', '⛔'];
 
     function spawnAmbientItem() {
       if (document.hidden) return;
