@@ -254,129 +254,6 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Sound Synthesizer via Web Audio API
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new AudioCtx();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    // Proactively unlock AudioContext on first real user gesture
-    function unlockAudio() {
-      try {
-        initAudio();
-        if (audioCtx && audioCtx.state === 'running') {
-          window.removeEventListener('click', unlockAudio);
-          window.removeEventListener('keydown', unlockAudio);
-          window.removeEventListener('touchstart', unlockAudio);
-        }
-      } catch (e) {
-        // Ignore unlock errors
-      }
-    }
-    window.addEventListener('click', unlockAudio);
-    window.addEventListener('keydown', unlockAudio);
-    window.addEventListener('touchstart', unlockAudio);
-
-    // Spooky sound effect
-    function playSpookyDrop(forceInit = false) {
-      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
-      try {
-        initAudio();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 1.0);
-        
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start(now);
-        osc.stop(now + 1.0);
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-
-    // Buzz sound for flies
-    function playFlyBuzz(duration = 0.5, forceInit = false) {
-      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(80, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + duration);
-
-        const mod = audioCtx.createOscillator();
-        const modGain = audioCtx.createGain();
-        mod.frequency.value = 35;
-        modGain.gain.value = 40;
-        
-        mod.connect(modGain);
-        modGain.connect(osc.frequency);
-        
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start();
-        mod.start();
-        osc.stop(audioCtx.currentTime + duration);
-        mod.stop(audioCtx.currentTime + duration);
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-
-    function playGoldblumChime(forceInit = false) {
-      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
-      try {
-        initAudio();
-        const now = audioCtx.currentTime;
-        const notes = [261.63, 329.63, 392.00, 523.25];
-        notes.forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
-          osc.frequency.exponentialRampToValueAtTime(freq * 2, now + 0.5);
-          
-          gain.gain.setValueAtTime(0, now);
-          gain.gain.linearRampToValueAtTime(0.08, now + (idx * 0.08) + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-          
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          
-          osc.start(now);
-          osc.stop(now + 1.2);
-        });
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-
-    // Play spooky drop on button hover/click
-    document.getElementById('btn-back').addEventListener('mouseenter', playGoldblumChime);
-
     // Ambient floating items
     const ambientContainer = document.getElementById('ambient-container');
     const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨'];
@@ -410,15 +287,12 @@
       el.addEventListener('click', (e) => {
         e.stopPropagation();
         if (el.textContent === '🪰') {
-          playFlyBuzz(0.3, true);
           el.textContent = '💥';
           setTimeout(() => el.remove(), 200);
         } else if (el.textContent === '🕶️') {
-          playGoldblumChime(true);
           el.textContent = '✨';
           setTimeout(() => el.remove(), 200);
         } else if (el.textContent === '💀') {
-          playSpookyDrop(true);
           el.textContent = '💨';
           setTimeout(() => el.remove(), 200);
         } else {

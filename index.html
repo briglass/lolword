@@ -483,7 +483,7 @@
 
     // Mute/Unmute Toggle Controller
     const btnMuteToggle = document.getElementById('btn-mute-toggle');
-    const muteIcon = document.getElementById('mute-icon');
+    let muteIcon = document.getElementById('mute-icon');
 
     // Set initial accessible labels for mute toggle
     btnMuteToggle.setAttribute('aria-label', 'Unmute sound');
@@ -492,13 +492,13 @@
     btnMuteToggle.addEventListener('click', () => {
       isMuted = !isMuted;
       
-      // Update Lucide Icon (Using mic & mic-off as requested)
+      // Replace the icon node so Lucide can re-render it cleanly
       if (isMuted) {
-        muteIcon.setAttribute('data-lucide', 'mic-off');
+        muteIcon.outerHTML = '<i data-lucide="mic-off" id="mute-icon" class="w-6 h-6 stroke-[3]"></i>';
         btnMuteToggle.setAttribute('aria-label', 'Unmute sound');
         btnMuteToggle.setAttribute('title', 'Unmute sound');
       } else {
-        muteIcon.setAttribute('data-lucide', 'mic');
+        muteIcon.outerHTML = '<i data-lucide="mic" id="mute-icon" class="w-6 h-6 stroke-[3]"></i>';
         btnMuteToggle.setAttribute('aria-label', 'Mute sound');
         btnMuteToggle.setAttribute('title', 'Mute sound');
         // Instantly initialize and trigger a sound test once unmuted
@@ -513,6 +513,7 @@
         }
       }
       lucide.createIcons();
+      muteIcon = document.getElementById('mute-icon');
     });
 
     // Play buzz sound (Brundlefly style)
