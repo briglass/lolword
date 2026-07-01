@@ -441,7 +441,7 @@ shareButton.addEventListener('click', () => {
         gridEmojis = '🟥🟥🟥🟥🟥\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛';
     }
 
-    const shareText = `${titleText}\n${gridEmojis}\n${messageText}\n\nhttps://brundle.co?utm_source=lolword&utm_medium=referral&utm_campaign=partner`;
+    const shareText = `${titleText}\n${gridEmojis}\n${messageText}\n\nhttps://lolword.com/games/dontle/`;
 
     if (navigator.clipboard) {
         navigator.clipboard.writeText(shareText).then(() => {
