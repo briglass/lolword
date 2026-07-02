@@ -277,18 +277,16 @@
         <!-- The Message -->
         <div class="mt-6 text-center text-white font-mono text-sm sm:text-base leading-relaxed max-w-2xl border-2 border-dashed border-zinc-700 p-4 sm:p-6 rounded-2xl bg-black/50">
           <p>
-            Greetings from the inventor of Jeffgoldblumle! Four years ago, I invented Jeffgoldblumle. Since then, it has completely changed my life along with the lives of millions of other people. It has not changed the life of Jeff Goldblum (yet). Recently, I invented a new game. However, this game has been deemed by several world government agencies including the WHO, the UN, and AARP, to be too DANGEROUS for public consumption. Luckily, these agencies have absolutely no enforcement mechanisms (yet). Therefore, I have set a release time for this new game. Once released, there is no telling what damage or havoc the game may unleash. See you then!
+            Greetings from the inventor of Jeffgoldblumle! Four years ago, I invented Jeffgoldblumle. Since then, it has completely changed my life along with the lives of millions of other people. It has not changed the life of Jeff Goldblum (yet). Recently, I invented a new game. However, this game has been deemed by several world government agencies including the WHO, the UN, and AARP, to be too DANGEROUS for public consumption. Luckily, these agencies have absolutely no enforcement mechanisms (yet). Therefore, despite their warnings, I am releasing it anyway. Once you enter, there is no telling what damage or havoc the game may unleash. Proceed with caution!
           </p>
         </div>
 
-        <!-- Countdown Header -->
-        <h3 class="text-zinc-400 font-bold uppercase tracking-wider font-mono text-xs sm:text-sm mt-8 mb-2">
-          Time Remaining Until Unclassified Unleashment
-        </h3>
-
-        <!-- Countdown display in seconds -->
-        <div class="px-6 py-3 bg-black/80 border-4 border-red-600 rounded-2xl font-mono font-black text-2xl sm:text-4xl text-red-500 tracking-widest shadow-[0_0_20px_rgba(239,68,68,0.4)] flex items-center gap-2">
-          <span id="countdown-seconds" class="animate-pulse">00000000</span> SECONDS
+        <!-- Enter Button -->
+        <div class="mt-8 flex justify-center w-full max-w-xs relative z-20">
+          <a id="btn-enter-game" href="games/seizurele/index.html" class="retro-btn w-full flex items-center justify-center gap-2 px-6 py-4 bg-red-600 text-white font-black uppercase text-base border-4 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] select-none transition-all hover:bg-red-500">
+            <i data-lucide="flame" class="w-5 h-5 stroke-[2.5]"></i>
+            AGREE & ENTER VOID
+          </a>
         </div>
       </div>
     </section>
@@ -413,22 +411,6 @@
         setTimeout(() => el.remove(), 10500);
       }, i * 800);
     }
-
-    // Countdown to Midnight Pacific Time, July 4, 2026 (UTC-7)
-    const targetDate = new Date('2026-07-04T00:00:00-07:00');
-    const countdownEl = document.getElementById('countdown-seconds');
-
-    function updateCountdown() {
-      const now = new Date();
-      const differenceMs = targetDate - now;
-      const secondsRemaining = Math.max(0, Math.floor(differenceMs / 1000));
-      if (countdownEl) {
-        countdownEl.textContent = secondsRemaining.toLocaleString('en-US');
-      }
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>

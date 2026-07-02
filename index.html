@@ -452,7 +452,7 @@
         </div>
       </a>
 
-      <!-- BUTTON 4: COMING SOON -->
+      <!-- BUTTON 4: SEIZURELE -->
       <a href="comingsoon.html"
          id="btn-soon"
          class="retro-btn flex flex-col items-center justify-between text-center p-4 sm:p-6 md:p-8 bg-zinc-900 border-4 border-black rounded-3xl group relative overflow-hidden h-64 sm:h-72 md:h-80 select-none">
@@ -460,8 +460,8 @@
         <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[size:100%_8px] opacity-40"></div>
         
         <!-- Header tag inside button -->
-        <span class="z-10 bg-red-600 text-white text-[10px] sm:text-xs px-3 py-1 font-mono rounded-full uppercase border-2 border-white tracking-widest animate-pulse">
-          Locked Void
+        <span class="z-10 bg-red-600 text-white text-[10px] sm:text-xs px-3 py-1 font-mono rounded-full uppercase border-2 border-white tracking-widest animate-pulse font-bold">
+          UNLEASHED VOID
         </span>
 
         <!-- Skull Icon -->
@@ -474,14 +474,14 @@
         <!-- Button Info -->
         <div class="z-10 flex flex-col items-center">
           <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-red-500 tracking-wider uppercase font-['Creepster']">
-            COMING SOON
+            SEIZURELE
           </h2>
           <p class="text-[10px] sm:text-xs font-mono font-bold text-zinc-400 uppercase tracking-widest mt-0.5 animate-pulse">
-            [ Click for more info ]
+            [ CLASSIFIED - ENTER AT OWN RISK ]
           </p>
-          <!-- Countdown display in seconds -->
-          <div class="mt-2 px-3 py-1 md:px-4 md:py-1.5 bg-black/60 border-2 border-red-500 rounded-xl font-mono font-black text-sm sm:text-lg md:text-2xl text-red-400 tracking-widest shadow-[inset_0_0_10px_rgba(239,68,68,0.5)]">
-            <span id="countdown-seconds">00000000</span> SECONDS
+          <!-- Alert box -->
+          <div class="mt-2 px-3 py-1.5 md:px-4 md:py-2 bg-black/60 border-2 border-red-500 rounded-xl font-mono font-black text-[10px] sm:text-xs text-red-400 tracking-wide shadow-[inset_0_0_10px_rgba(239,68,68,0.5)] uppercase animate-pulse">
+            WARNING: INTENSE SENSORY OVERLOAD
           </div>
         </div>
       </a>
@@ -840,23 +840,6 @@
         setTimeout(() => el.remove(), 10500);
       }, i * 800);
     }
-
-    // Countdown to Midnight Pacific Time, July 4, 2026 (UTC-7)
-    const targetDate = new Date('2026-07-04T00:00:00-07:00');
-    const countdownEl = document.getElementById('countdown-seconds');
-
-    function updateCountdown() {
-      const now = new Date();
-      const differenceMs = targetDate - now;
-      const secondsRemaining = Math.max(0, Math.floor(differenceMs / 1000));
-      if (countdownEl) {
-        // Format with thousand separators for extra visual style
-        countdownEl.textContent = secondsRemaining.toLocaleString('en-US');
-      }
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>

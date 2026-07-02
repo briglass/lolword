@@ -252,34 +252,32 @@
 <body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between overflow-hidden select-none">
     <div id="disruption-overlay" class="pointer-events-none fixed inset-0 overflow-hidden z-40"></div>
 
-    <!-- Header -->
-    <header class="spin-target border-b border-slate-800 px-4 py-3 flex items-center justify-between w-full max-w-lg mx-auto shrink-0">
+    <!-- Header (No longer spins to keep controls stable and readable) -->
+    <header class="border-b border-slate-800 px-4 py-3 flex items-center justify-between w-full max-w-lg mx-auto shrink-0 relative z-30">
         <div class="flex items-center gap-2">
             <!-- Back to LOLWORD link -->
-            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white px-2.5 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
+            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white px-2 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
-                BACK TO LOLWORD
             </a>
             <button id="btn-help" class="text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                 </svg>
             </button>
-            <!-- Solve Timer Display -->
-            <div id="timer-container" class="bg-slate-900 border border-slate-800 rounded-full px-3 py-1 flex items-center gap-1.5 text-xs font-semibold text-slate-400 shadow-sm">
-                <span class="relative flex h-2 w-2">
-                    <span id="timer-dot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-75"></span>
-                    <span id="timer-dot-inner" class="relative inline-flex rounded-full h-2 w-2 bg-slate-400"></span>
-                </span>
-                <span id="timer-display" class="font-mono tracking-wider">00:00.0</span>
-            </div>
         </div>
 
-        <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent select-none cursor-pointer" onclick="window.location.reload()">
-            SEIZURELE
-        </h1>
+        <div class="flex-1 flex items-center justify-center gap-4">
+            <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent uppercase">SEIZURELE</h1>
+            <div id="timer-container" class="flex items-center gap-2 px-3 py-1 bg-slate-900/90 border-2 border-emerald-500 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span id="timer-dot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span id="timer-dot-inner" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span id="timer-display" class="font-mono tracking-widest text-2xl font-black text-emerald-300 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]">00:00.0</span>
+            </div>
+        </div>
 
         <div class="flex items-center gap-2">
             <button id="btn-stats" class="text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
@@ -290,44 +288,49 @@
         </div>
     </header>
 
-    <!-- Main Game Area -->
-    <main class="spin-target flex-grow flex flex-col justify-center items-center p-4 max-w-lg w-full mx-auto relative overflow-hidden">
-        
-        <!-- Toast Notification Container -->
-        <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+    <!-- Crazy Visuals Container (Receives jitter, flashes, and spin animations) -->
+    <div id="crazy-visuals-container" class="flex-grow flex flex-col justify-between overflow-hidden relative">
 
-        <!-- 6x5 Letter Grid -->
-        <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[330px] my-auto">
-            <!-- Dynamically generated via JavaScript -->
+        <!-- Main Game Area -->
+        <main class="spin-target flex-grow flex flex-col justify-center items-center p-4 max-w-lg w-full mx-auto relative overflow-hidden">
+            
+            <!-- Toast Notification Container -->
+            <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+            <!-- 6x5 Letter Grid -->
+            <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[330px] my-auto">
+                <!-- Dynamically generated via JavaScript -->
+            </div>
+
+        </main>
+
+        <!-- Keyboard Area -->
+        <footer class="w-full max-w-md md:max-w-7xl mx-auto p-2 pb-4 shrink-0">
+            <div id="keyboard" class="flex flex-col gap-2 max-w-md mx-auto">
+                <!-- Dynamically generated via JavaScript -->
+            </div>
+            <!-- Adsterra / Cameljolly Ads -->
+            <div class="w-full mt-4 max-w-md md:max-w-5xl lg:max-w-7xl mx-auto">
+                <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
+                <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
+            </div>
+        </footer>
+
+        <!-- AdSense ad unit -->
+        <div class="w-full max-w-lg mx-auto px-4 mt-6 mb-6 z-10 ad-card">
+          <div class="bg-slate-900/95 border border-slate-700 rounded-3xl p-4 text-center">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9509983147297425"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
         </div>
 
-    </main>
-
-    <!-- Keyboard Area -->
-    <footer class="w-full max-w-md md:max-w-7xl mx-auto p-2 pb-4 shrink-0">
-        <div id="keyboard" class="flex flex-col gap-2 max-w-md mx-auto">
-            <!-- Dynamically generated via JavaScript -->
-        </div>
-        <!-- Adsterra / Cameljolly Ads -->
-        <div class="w-full mt-4 max-w-md md:max-w-5xl lg:max-w-7xl mx-auto">
-            <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
-            <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
-        </div>
-    </footer>
-
-    <!-- AdSense ad unit -->
-    <div class="w-full max-w-lg mx-auto px-4 mt-6 mb-6 z-10 ad-card">
-      <div class="bg-slate-900/95 border border-slate-700 rounded-3xl p-4 text-center">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9509983147297425"
-             data-ad-slot="1234567890"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
     </div>
 
     <!-- MODAL 1: How to Play -->

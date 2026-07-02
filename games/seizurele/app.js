@@ -108,6 +108,20 @@ function startTimer() {
     startTime = Date.now();
     updateTimerDisplay();
     timerInterval = window.setInterval(updateTimerDisplay, 100);
+    // make the pulsating dot red while timer is active
+    try {
+        if (timerDot) {
+            timerDot.classList.remove('bg-emerald-400');
+            timerDot.classList.add('bg-red-400');
+        }
+        const inner = document.getElementById('timer-dot-inner');
+        if (inner) {
+            inner.classList.remove('bg-emerald-500');
+            inner.classList.add('bg-red-500');
+        }
+    } catch (e) {
+        // ignore if DOM not ready
+    }
 }
 
 function updateTimerDisplay() {
@@ -122,6 +136,20 @@ function stopTimer() {
         timerInterval = null;
     }
     timerStarted = false;
+    // revert the pulsating dot to green when stopped
+    try {
+        if (timerDot) {
+            timerDot.classList.remove('bg-red-400');
+            timerDot.classList.add('bg-emerald-400');
+        }
+        const inner = document.getElementById('timer-dot-inner');
+        if (inner) {
+            inner.classList.remove('bg-red-500');
+            inner.classList.add('bg-emerald-500');
+        }
+    } catch (e) {
+        // ignore if DOM not ready
+    }
 }
 
 function startDisruptionEffects() {
@@ -188,10 +216,11 @@ function scheduleSpinToggle() {
 }
 
 function applySpinClass() {
+    const target = document.getElementById('crazy-visuals-container') || document.body;
     if (disruptionSpinActive) {
-        document.body.classList.add('disruption-spin');
+        target.classList.add('disruption-spin');
     } else {
-        document.body.classList.remove('disruption-spin');
+        target.classList.remove('disruption-spin');
     }
 }
 
@@ -203,13 +232,13 @@ function randomizeSpin() {
 }
 
 function jitterScreen() {
-    const body = document.body;
+    const target = document.getElementById('crazy-visuals-container') || document.body;
     const amount = 1 + Math.random() * 3;
-    body.style.transform = `translate(${(Math.random() - 0.5) * amount}px, ${(Math.random() - 0.5) * amount}px)`;
-    body.classList.add('jitter-glitch');
+    target.style.transform = `translate(${(Math.random() - 0.5) * amount}px, ${(Math.random() - 0.5) * amount}px)`;
+    target.classList.add('jitter-glitch');
     window.setTimeout(() => {
-        body.style.transform = '';
-        body.classList.remove('jitter-glitch');
+        target.style.transform = '';
+        target.classList.remove('jitter-glitch');
     }, 180 + Math.random() * 140);
 }
 
@@ -596,17 +625,17 @@ function copyShareResult() {
     }
     const solved = isGameOver ? `${stats.wins === 0 ? 'X' : currentRow + 1}/${MAX_ROUNDS}` : `?/${MAX_ROUNDS}`;
     const time = timerStarted || startTime ? formatTime(Date.now() - startTime) : '00:00.0';
-    const header = `SEIZURELE ${solved} • ${time}`;
+    const header = `🌀 SEIZURELE ${solved} • ${time} ⚡`;
     const squares = guessResults.map((row) =>
         row
             .map((status) => {
-                if (status === 'correct') return '🟩';
-                if (status === 'present') return '🟨';
-                return '⬛';
+                if (status === 'correct') return '✨';  // Sparkles for Correct
+                if (status === 'present') return '⚡';  // Lightning Strobe for Present
+                return '😵‍💫';                           // Dizzy/Spinning for Absent
             })
             .join('')
     ).join('\n');
-    const shareText = `${header}\n${squares}`;
+    const shareText = `${header}\n${squares}\n\nhttps://lolword.com/games/seizurele/`;
     navigator.clipboard.writeText(shareText).then(() => {
         showToast('Result copied to clipboard');
     }).catch(() => {
