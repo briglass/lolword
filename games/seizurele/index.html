@@ -166,6 +166,57 @@
         .ad-card:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
             display: none !important;
         }
+
+        /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally and never stack vertically */
+        #container-7e812c41bce777d6fc86e283014cb75e {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            gap: 6px !important;
+            box-sizing: border-box !important;
+            margin: 0 auto !important;
+        }
+        
+        #container-7e812c41bce777d6fc86e283014cb75e > div {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            gap: 6px !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e > div > div,
+        #container-7e812c41bce777d6fc86e283014cb75e a,
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="item"] {
+            flex: 1 1 0% !important;
+            width: 25% !important;
+            max-width: 25% !important;
+            min-width: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e img {
+            max-width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e * {
+            font-size: clamp(8px, 1.8vw, 12px) !important;
+            line-height: 1.1 !important;
+            text-align: center !important;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between overflow-hidden select-none">
@@ -226,6 +277,11 @@
     <footer class="w-full max-w-md mx-auto p-2 pb-4 shrink-0">
         <div id="keyboard" class="flex flex-col gap-2">
             <!-- Dynamically generated via JavaScript -->
+        </div>
+        <!-- Adsterra / Cameljolly Ads -->
+        <div class="w-full mt-4">
+            <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
+            <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
         </div>
     </footer>
 
@@ -405,7 +461,5 @@
     <script src="allowed.js"></script>
     <script src="words.js"></script>
     <script src="app.js"></script>
-    <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
-    <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
 </body>
 </html>
