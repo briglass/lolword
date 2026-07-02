@@ -137,59 +137,89 @@
             display: none !important;
         }
 
-        /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally and never stack vertically */
+        /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally, stretch all the way across, and never stack vertically */
         #container-7e812c41bce777d6fc86e283014cb75e {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: stretch !important;
-            justify-content: space-between !important;
+            display: block !important;
             width: 100% !important;
             max-width: 100% !important;
-            gap: 6px !important;
-            box-sizing: border-box !important;
             margin: 0 auto !important;
+            box-sizing: border-box !important;
         }
-        
-        #container-7e812c41bce777d6fc86e283014cb75e > div {
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
             display: flex !important;
             flex-direction: row !important;
             flex-wrap: nowrap !important;
-            align-items: stretch !important;
             justify-content: space-between !important;
+            align-items: stretch !important;
             width: 100% !important;
             max-width: 100% !important;
             gap: 6px !important;
             box-sizing: border-box !important;
         }
 
-        #container-7e812c41bce777d6fc86e283014cb75e > div > div,
-        #container-7e812c41bce777d6fc86e283014cb75e a,
-        #container-7e812c41bce777d6fc86e283014cb75e [class*="item"] {
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
             flex: 1 1 0% !important;
             width: 25% !important;
             max-width: 25% !important;
             min-width: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
+            margin: 0 !important;
+            padding: 2px !important;
+            box-sizing: border-box !important;
+            display: block !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e a {
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__img-container"],
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__img"] {
+            width: 100% !important;
+            max-width: 100% !important;
             box-sizing: border-box !important;
         }
 
         #container-7e812c41bce777d6fc86e283014cb75e img {
+            width: 100% !important;
             max-width: 100% !important;
             height: auto !important;
-            object-fit: contain !important;
+            object-fit: cover !important;
+            box-sizing: border-box !important;
         }
 
         #container-7e812c41bce777d6fc86e283014cb75e * {
             font-size: clamp(8px, 1.8vw, 12px) !important;
-            line-height: 1.1 !important;
+            line-height: 1.15 !important;
             text-align: center !important;
+        }
+
+        /* Desktop styles (viewport >= 768px) */
+        @media (min-width: 768px) {
+            #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
+                gap: 16px !important;
+            }
+            #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
+                padding: 8px !important;
+            }
+            #container-7e812c41bce777d6fc86e283014cb75e * {
+                font-size: clamp(12px, 1.2vw, 16px) !important;
+                line-height: 1.25 !important;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 text-purple-100 min-h-screen flex flex-col justify-between overflow-y-auto select-none transition-colors duration-1000" id="game-body">
+<body class="bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 text-purple-100 min-h-screen flex flex-col justify-start sm:justify-center items-center overflow-y-auto select-none transition-colors duration-1000 py-4 gap-2" id="game-body">
     
     <!-- Header -->
     <header class="border-b border-purple-900/60 px-4 py-2 flex items-center justify-between w-full max-w-xl mx-auto shrink-0 z-10">
@@ -222,7 +252,7 @@
     </header>
 
     <!-- Main Game Area -->
-    <main class="flex-grow flex flex-col justify-start items-center py-4 px-2 max-w-xl w-full mx-auto relative">
+    <main class="flex flex-col justify-start items-center py-4 px-2 max-w-xl w-full mx-auto relative">
         
         <!-- Toast Notification Container -->
         <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
@@ -245,12 +275,12 @@
     </main>
 
     <!-- Keyboard Area -->
-    <footer class="w-full max-w-full sm:max-w-xl mx-auto p-2 pb-6 shrink-0 z-10">
-        <div id="keyboard" class="flex flex-col gap-1.5 sm:gap-2">
+    <footer class="w-full max-w-full sm:max-w-xl md:max-w-7xl mx-auto p-2 pb-6 shrink-0 z-10">
+        <div id="keyboard" class="flex flex-col gap-1.5 sm:gap-2 max-w-xl mx-auto">
             <!-- Dynamically generated via JavaScript -->
         </div>
         <!-- Adsterra / Cameljolly Ads -->
-        <div class="w-full mt-4">
+        <div class="w-full mt-4 max-w-xl md:max-w-5xl lg:max-w-7xl mx-auto">
             <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
             <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
         </div>

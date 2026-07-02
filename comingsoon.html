@@ -152,55 +152,85 @@
       display: none !important;
     }
 
-    /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally and never stack vertically */
+    /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally, stretch all the way across, and never stack vertically */
     #container-7e812c41bce777d6fc86e283014cb75e {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      align-items: stretch !important;
-      justify-content: space-between !important;
+      display: block !important;
       width: 100% !important;
       max-width: 100% !important;
-      gap: 6px !important;
-      box-sizing: border-box !important;
       margin: 0 auto !important;
+      box-sizing: border-box !important;
     }
-    
-    #container-7e812c41bce777d6fc86e283014cb75e > div {
+
+    #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
       display: flex !important;
       flex-direction: row !important;
       flex-wrap: nowrap !important;
-      align-items: stretch !important;
       justify-content: space-between !important;
+      align-items: stretch !important;
       width: 100% !important;
       max-width: 100% !important;
       gap: 6px !important;
       box-sizing: border-box !important;
     }
 
-    #container-7e812c41bce777d6fc86e283014cb75e > div > div,
-    #container-7e812c41bce777d6fc86e283014cb75e a,
-    #container-7e812c41bce777d6fc86e283014cb75e [class*="item"] {
+    #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
       flex: 1 1 0% !important;
       width: 25% !important;
       max-width: 25% !important;
       min-width: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
+      margin: 0 !important;
+      padding: 2px !important;
+      box-sizing: border-box !important;
+      display: block !important;
+    }
+
+    #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    #container-7e812c41bce777d6fc86e283014cb75e a {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: block !important;
+      box-sizing: border-box !important;
+    }
+
+    #container-7e812c41bce777d6fc86e283014cb75e [class*="__img-container"],
+    #container-7e812c41bce777d6fc86e283014cb75e [class*="__img"] {
+      width: 100% !important;
+      max-width: 100% !important;
       box-sizing: border-box !important;
     }
 
     #container-7e812c41bce777d6fc86e283014cb75e img {
+      width: 100% !important;
       max-width: 100% !important;
       height: auto !important;
-      object-fit: contain !important;
+      object-fit: cover !important;
+      box-sizing: border-box !important;
     }
 
     #container-7e812c41bce777d6fc86e283014cb75e * {
       font-size: clamp(8px, 1.8vw, 12px) !important;
-      line-height: 1.1 !important;
+      line-height: 1.15 !important;
       text-align: center !important;
+    }
+
+    /* Desktop styles (viewport >= 768px) */
+    @media (min-width: 768px) {
+      #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
+        gap: 16px !important;
+      }
+      #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
+        padding: 8px !important;
+      }
+      #container-7e812c41bce777d6fc86e283014cb75e * {
+        font-size: clamp(12px, 1.2vw, 16px) !important;
+        line-height: 1.25 !important;
+      }
     }
   </style>
 </head>
@@ -215,7 +245,7 @@
   <div id="ambient-container" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
 
   <!-- Main Content Wrapper -->
-  <main class="w-full max-w-3xl px-4 flex-grow flex flex-col items-center justify-center z-10 my-8">
+  <main class="w-full flex-grow flex flex-col items-center justify-center z-10 my-8">
     
     <!-- Title Area -->
     <header class="text-center mb-8 select-none">
@@ -227,7 +257,7 @@
     </header>
 
     <!-- Broadcaster Message Card -->
-    <section class="w-full bg-zinc-900 border-4 border-black rounded-3xl p-6 sm:p-10 shadow-[8px_8px_0px_0px_#000] relative overflow-hidden select-none mb-8">
+    <section class="w-full max-w-3xl bg-zinc-900 border-4 border-black rounded-3xl p-6 sm:p-10 shadow-[8px_8px_0px_0px_#000] relative overflow-hidden select-none mb-8">
       <!-- Matrix/glitch scanline background -->
       <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[size:100%_8px] opacity-40 pointer-events-none"></div>
 
@@ -274,7 +304,7 @@
     </nav>
 
     <!-- Adsterra / Cameljolly Ads -->
-    <div class="w-full max-w-3xl px-4 z-10">
+    <div class="w-full max-w-3xl md:max-w-7xl px-4 z-10">
       <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
       <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
     </div>
