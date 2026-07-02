@@ -431,14 +431,12 @@ shareButton.addEventListener('click', () => {
         ? `Resisted the urge to play and successfully did not play. Current Streak: ${stats.streak}` 
         : `Failed to resist. Entered a word. Current Streak: ${stats.streak}`;
 
-    // Generate 6 rows of word response emoji blocks to look like Wordle
+    // 1 row of trophies for a win, and 1 row of Xs for a loss
     let gridEmojis = '';
     if (gameOutcome === 'win') {
-        // 6 rows of green blocks for successful resistance
-        gridEmojis = '🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩\n🟩🟩🟩🟩🟩';
+        gridEmojis = '🏆🏆🏆🏆🏆';
     } else {
-        // 1 row of red block (failed guess) and 5 rows of black blocks (empty rows)
-        gridEmojis = '🟥🟥🟥🟥🟥\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛\n⬛⬛⬛⬛⬛';
+        gridEmojis = '❌❌❌❌❌';
     }
 
     const shareText = `${titleText}\n${gridEmojis}\n${messageText}\n\nhttps://lolword.com/games/dontle/`;
