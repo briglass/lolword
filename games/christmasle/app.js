@@ -192,13 +192,16 @@ function createKeyboard() {
     keyboardElement.innerHTML = '';
     keyboardLayout.forEach((row) => {
         const rowEl = document.createElement('div');
-        rowEl.className = 'flex justify-center gap-1 sm:gap-1.5';
+        rowEl.className = 'flex justify-center w-full gap-1 sm:gap-1.5 px-1';
         row.forEach((key) => {
             const keyButton = document.createElement('button');
             keyButton.textContent = key;
             keyButton.dataset.key = key;
-            keyButton.className = 'min-w-[28px] sm:min-w-[36px] h-12 rounded-xl bg-emerald-950 text-slate-100 font-bold shadow-md hover:bg-emerald-900 transition-colors focus:outline-none active:scale-95 text-xs sm:text-sm border border-emerald-800/40';
-            if (key === 'ENTER' || key === 'BACK') keyButton.classList.add('min-w-[50px]', 'sm:min-w-[62px]', 'text-[10px]', 'sm:text-xs');
+            // set flex-grow, min-width, and padding to fully use client/window width nicely
+            keyButton.className = 'flex-1 min-w-[20px] max-w-[80px] h-12 sm:h-14 rounded-xl bg-emerald-950 text-slate-100 font-extrabold shadow-md hover:bg-emerald-900 transition-colors focus:outline-none active:scale-95 text-[11px] sm:text-base border border-emerald-800/40 select-none';
+            if (key === 'ENTER' || key === 'BACK') {
+                keyButton.classList.add('flex-[1.5]', 'max-w-[110px]', 'text-[9px]', 'sm:text-[13px]');
+            }
             keyButton.addEventListener('click', () => handleKey(key));
             rowEl.appendChild(keyButton);
         });
