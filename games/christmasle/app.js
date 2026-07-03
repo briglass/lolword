@@ -37,6 +37,7 @@ let isGameOver = false;
 let solution = '';
 let stats = null;
 let guessResults = [];
+let guessedWords = [];
 let todayDateString = '';
 
 const keyboardLayout = [
@@ -262,6 +263,8 @@ function submitGuess() {
     const evaluation = evaluateGuess(currentGuess);
     revealGuessTiles(evaluation);
     guessResults[currentRow] = evaluation.map(cell => cell.status);
+    // store the actual guessed word so it can be shown later if the player peeks
+    guessedWords[currentRow] = currentGuess;
     updateKeyboard(evaluation);
 
     if (currentGuess === solution) {
@@ -510,6 +513,8 @@ function updateStats(won, guessCount) {
     stats.todayDate = todayDateString;
     stats.todayWon = won;
     stats.todayResults = [...guessResults];
+    // persist the actual guessed words so we can render them later
+    stats.todayGuesses = [...guessedWords];
     
     if (won) {
         stats.wins += 1;
@@ -520,6 +525,55 @@ function updateStats(won, guessCount) {
         stats.currentStreak = 0;
     }
     saveStats();
+}
+
+function renderSavedGuesses() {
+    if (!stats || !stats.todayResults || stats.todayResults.length === 0) return;
+    const rows = stats.todayResults.length;
+    for (let row = 0; row < rows; row += 1) {
+        const rowStatuses = stats.todayResults[row] || [];
+        const rowLetters = (stats.todayGuesses && stats.todayGuesses[row]) ? stats.todayGuesses[row] : (guessedWords[row] || '');
+        for (let col = 0; col < WORD_LENGTH; col += 1) {
+            const tile = document.getElementById(`tile-${row}-${col}`);
+            if (!tile) continue;
+            const letter = rowLetters[col] || '';
+            tile.textContent = letter;
+            tile.classList.remove('bg-slateBoard', 'border-emerald-950/40', 'border-emerald-600');
+            const status = rowStatuses[col];
+            if (status && QUIET_COLORS[status]) {
+                const classes = QUIET_COLORS[status].split(' ');
+                tile.classList.add(...classes);
+                if (status === 'present') {
+                    tile.classList.remove('text-slate-50', 'text-white');
+                    tile.classList.add('text-slate-950');
+                } else {
+                    tile.classList.remove('text-slate-50', 'text-slate-950');
+                    tile.classList.add('text-white');
+                }
+            }
+        }
+    }
+
+    // update keyboard state based on saved guesses
+    for (let row = 0; row < stats.todayResults.length; row += 1) {
+        const rowStatuses = stats.todayResults[row] || [];
+        const rowLetters = (stats.todayGuesses && stats.todayGuesses[row]) ? stats.todayGuesses[row] : (guessedWords[row] || '');
+        for (let col = 0; col < rowStatuses.length; col += 1) {
+            const status = rowStatuses[col];
+            const letter = rowLetters[col];
+            if (!letter) continue;
+            const key = keyboardElement.querySelector(`button[data-key="${letter}"]`);
+            if (!key) continue;
+            const previousState = key.dataset.state;
+            const priority = { absent: 1, present: 2, correct: 3 };
+            if (!previousState || priority[status] > priority[previousState]) {
+                key.dataset.state = status;
+                const classesToRemove = Object.values(QUIET_COLORS).flatMap(c => c.split(' '));
+                key.classList.remove(...classesToRemove);
+                key.classList.add(...QUIET_COLORS[status].split(' '));
+            }
+        }
+    }
 }
 
 function renderStats() {
@@ -625,6 +679,30 @@ function addModalListeners() {
     btnShowTodayResults.addEventListener('click', () => {
         showStatsModal(stats.todayWon);
     });
+
+    const btnPeekGuesses = document.getElementById('btn-peek-guesses');
+    if (btnPeekGuesses) {
+        btnPeekGuesses.addEventListener('click', () => {
+            lockOverlay.classList.add('hidden');
+            // Add a temporary subtle floating "Show Stats" bubble to let them return to overlay/share
+            createStatsFloatingBubble();
+        });
+    }
+}
+
+function createStatsFloatingBubble() {
+    // Avoid creating duplicate bubbles
+    if (document.getElementById('stats-floating-bubble')) return;
+
+    const bubble = document.createElement('button');
+    bubble.id = 'stats-floating-bubble';
+    bubble.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 px-5 py-3 bg-rose-600 hover:bg-rose-500 font-extrabold text-white text-xs tracking-wider uppercase rounded-full shadow-2xl border-2 border-white z-40 animate-bounce active:scale-95 flex items-center gap-1.5 focus:outline-none';
+    bubble.innerHTML = '🎄 Show Results & Share';
+    bubble.addEventListener('click', () => {
+        lockOverlay.classList.remove('hidden');
+        bubble.remove();
+    });
+    document.body.appendChild(bubble);
 }
 
 function setupMuteToggle() {
@@ -662,9 +740,9 @@ async function initialize() {
         isGameOver = true;
         currentRow = stats.todayResults.length;
         guessResults = [...stats.todayResults];
-        
-        // Show the overlay
-        lockOverlay.classList.remove('hidden');
+        // restore saved guessed words if present so we can render them
+        guessedWords = stats.todayGuesses ? [...stats.todayGuesses] : guessedWords;
+        // Do not block with the overlay; show the saved guesses like a regular Wordle
     }
     
     createBoard();
@@ -674,6 +752,11 @@ async function initialize() {
     setupMuteToggle();
     startSnowfall();
     renderStats();
+
+    // Render saved guesses after board/keyboard created
+    if (isGameOver) {
+        renderSavedGuesses();
+    }
     
     // Unhide icons
     lucide.createIcons();

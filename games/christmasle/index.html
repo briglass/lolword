@@ -309,12 +309,7 @@
     <!-- Header -->
     <header class="border-b border-emerald-900/60 bg-emerald-950/20 px-4 py-4 flex items-center justify-between w-full max-w-lg mx-auto shrink-0 relative z-30 mt-3 rounded-b-2xl">
         <div class="flex items-center gap-2">
-            <!-- Back to LOLWORD link -->
-            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-emerald-300 hover:text-white px-2.5 py-1.5 bg-emerald-900/40 border border-emerald-800 hover:border-emerald-600 rounded-xl transition-all flex items-center gap-1 focus:outline-none shadow-md">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                <span>LOLWORD</span>
-            </a>
-            <button id="btn-help" class="text-emerald-300 hover:text-white p-1 rounded-xl bg-emerald-900/30 border border-emerald-800/40 hover:border-emerald-600 transition-colors focus:outline-none" aria-label="How to play">
+            <button id="btn-help" class="text-emerald-300 hover:text-white p-1.5 rounded-xl bg-emerald-900/30 border border-emerald-800/40 hover:border-emerald-600 transition-colors focus:outline-none" aria-label="How to play">
                 <i data-lucide="help-circle" class="w-6 h-6"></i>
             </button>
         </div>
@@ -329,7 +324,7 @@
             <button id="btn-mute-toggle" class="text-emerald-300 hover:text-white p-1.5 rounded-xl bg-emerald-900/30 border border-emerald-800/40 hover:border-emerald-600 transition-all focus:outline-none" aria-label="Toggle Sound">
                 <i data-lucide="volume-2" id="mute-icon" class="w-5 h-5"></i>
             </button>
-            <button id="btn-stats" class="text-emerald-300 hover:text-white p-1 rounded-xl bg-emerald-900/30 border border-emerald-800/40 hover:border-emerald-600 transition-colors focus:outline-none" aria-label="Statistics">
+            <button id="btn-stats" class="text-emerald-300 hover:text-white p-1.5 rounded-xl bg-emerald-900/30 border border-emerald-800/40 hover:border-emerald-600 transition-colors focus:outline-none" aria-label="Statistics">
                 <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
             </button>
         </div>
@@ -340,8 +335,16 @@
     <!-- Main Container -->
     <div class="flex-grow flex flex-col justify-between overflow-hidden relative z-20">
 
-        <!-- Banner / Hint area (Christmas spirit) -->
-        <div class="w-full max-w-md mx-auto px-4 pt-3 shrink-0">
+        <!-- Navigation and Hint area (Christmas spirit) -->
+        <div class="w-full max-w-md mx-auto px-4 pt-3 shrink-0 flex flex-col gap-2.5">
+            <!-- Back to LOLWORD link placed below header but above banner -->
+            <div class="flex justify-start w-full">
+                <a href="../../index.html" class="text-[11px] font-black uppercase tracking-wider text-emerald-300 hover:text-white px-3 py-1.5 bg-emerald-950/80 border border-emerald-800/60 hover:border-emerald-600 rounded-xl transition-all flex items-center gap-1.5 focus:outline-none shadow-md w-fit">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to LOLWORD</span>
+                </a>
+            </div>
+
             <div id="christmas-banner" class="bg-gradient-to-r from-red-950/60 via-emerald-950/60 to-red-950/60 border border-emerald-700/40 rounded-2xl p-2.5 text-center shadow-[0_0_15px_rgba(22,163,74,0.15)] flex flex-col items-center justify-center">
                 <p id="christmas-headline" class="text-red-400 font-black text-xs uppercase tracking-widest mb-0.5 flex items-center gap-1">
                     🎅 HOLIDAY CHEER INCOMING ❄️
@@ -359,13 +362,18 @@
             <div id="toast-container" class="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
 
             <!-- Lock overlay if already played today -->
-            <div id="lock-overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-40 hidden flex flex-col items-center justify-center p-6 text-center">
+            <div id="lock-overlay" class="absolute inset-0 bg-slate-950/92 backdrop-blur-md z-40 hidden flex flex-col items-center justify-center p-6 text-center">
                 <span class="text-6xl mb-4 animate-bounce">🎁</span>
                 <h3 class="text-2xl font-black text-rose-500 christmas-font tracking-wide mb-2">You Opened Today's Present!</h3>
                 <p class="text-sm text-slate-300 max-w-xs mb-6 font-medium">You have already completed today's festive word. Come back at midnight for another dose of Christmas cheer!</p>
-                <button id="btn-show-today-results" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 font-extrabold text-white rounded-2xl transition-all shadow-lg shadow-emerald-900/30 text-sm focus:outline-none active:scale-95 flex items-center gap-2">
-                    <i data-lucide="share-2" class="w-4 h-4"></i> VIEW STATS & SHARE
-                </button>
+                <div class="flex flex-col sm:flex-row gap-3 w-full justify-center items-center">
+                    <button id="btn-show-today-results" class="w-full sm:w-auto px-5 py-3 bg-emerald-600 hover:bg-emerald-500 font-extrabold text-white rounded-2xl transition-all shadow-lg shadow-emerald-900/30 text-sm focus:outline-none active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="share-2" class="w-4 h-4"></i> VIEW STATS & SHARE
+                    </button>
+                    <button id="btn-peek-guesses" class="w-full sm:w-auto px-5 py-3 bg-slate-800 hover:bg-slate-700 font-extrabold text-white rounded-2xl transition-all border border-slate-700 hover:border-slate-600 text-sm focus:outline-none active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="eye" class="w-4 h-4"></i> PEEK TODAY'S GUESSES
+                    </button>
+                </div>
             </div>
 
             <!-- Dynamic Letter Grid (grid columns defined inline based on word length) -->
