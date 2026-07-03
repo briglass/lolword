@@ -392,19 +392,37 @@ function endGame(won) {
             playSuccessChime();
             triggerHolidayCheer();
         }, revealDelay);
+        
+        // Save daily lock status
+        updateStats(won, currentRow + 1);
+        
+        setTimeout(() => {
+            showStatsModal(won);
+        }, revealDelay + 1400);
     } else {
         showToast('🎅 Better luck next time! ❄️');
         setTimeout(() => {
             playFailureChime();
         }, revealDelay);
+        
+        // Save daily lock status
+        updateStats(won, currentRow + 1);
+        
+        setTimeout(() => {
+            showLossOverlay();
+        }, revealDelay + 1400);
     }
-    
-    // Save daily lock status
-    updateStats(won, currentRow + 1);
-    
-    setTimeout(() => {
-        showStatsModal(won);
-    }, revealDelay + 1400);
+}
+
+function showLossOverlay() {
+    const lossOverlay = document.getElementById('loss-overlay');
+    const lossWordDisplay = document.getElementById('loss-word-display');
+    if (lossOverlay && lossWordDisplay) {
+        lossWordDisplay.textContent = solution;
+        lossOverlay.classList.remove('hidden');
+        lucide.createIcons();
+        triggerHolidayCheer(); // Burst of holiday cheer even on loss to keep it super festive!
+    }
 }
 
 function getCheerMessage(won, count) {
@@ -686,6 +704,31 @@ function addModalListeners() {
             lockOverlay.classList.add('hidden');
             // Add a temporary subtle floating "Show Stats" bubble to let them return to overlay/share
             createStatsFloatingBubble();
+        });
+    }
+
+    const lossOverlay = document.getElementById('loss-overlay');
+    const btnCloseLossOverlay = document.getElementById('btn-close-loss-overlay');
+    const btnLossContinue = document.getElementById('btn-loss-continue');
+
+    const closeLossOverlayFunc = () => {
+        if (lossOverlay) {
+            lossOverlay.classList.add('hidden');
+        }
+        showStatsModal(false);
+    };
+
+    if (btnCloseLossOverlay) {
+        btnCloseLossOverlay.addEventListener('click', closeLossOverlayFunc);
+    }
+    if (btnLossContinue) {
+        btnLossContinue.addEventListener('click', closeLossOverlayFunc);
+    }
+    if (lossOverlay) {
+        lossOverlay.addEventListener('click', (event) => {
+            if (event.target === lossOverlay) {
+                closeLossOverlayFunc();
+            }
         });
     }
 }

@@ -538,6 +538,41 @@
         </div>
     </div>
 
+    <!-- LOSS OVERLAY: Prominent Festive Answer Display -->
+    <div id="loss-overlay" class="fixed inset-0 bg-slate-950/98 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 select-none">
+        <div class="relative max-w-md w-full bg-slate-900 border-4 border-red-700 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(220,38,38,0.4)] animate-pop flex flex-col items-center text-center">
+            
+            <!-- Close Button (X) -->
+            <button id="btn-close-loss-overlay" class="absolute top-4 right-4 text-slate-400 hover:text-white hover:scale-110 transition-all focus:outline-none" aria-label="Close">
+                <i data-lucide="x" class="w-8 h-8 stroke-[3]"></i>
+            </button>
+            
+            <div class="text-5xl sm:text-6xl mb-4 sm:mb-6 animate-bounce">🎅❄️🎁</div>
+            
+            <h3 class="text-lg sm:text-xl font-bold text-slate-300 uppercase tracking-widest mb-3 font-mono">
+                Oh, Coal!
+            </h3>
+            
+            <p class="text-base sm:text-lg font-semibold text-rose-100 italic mb-5">
+                The festive word of the day was:
+            </p>
+            
+            <div class="bg-slate-950 border-2 border-red-600/40 px-6 py-4 sm:px-8 sm:py-6 rounded-2xl mb-6 sm:mb-8 shadow-[inset_0_0_20px_rgba(220,38,38,0.2)]">
+                <p id="loss-word-display" class="text-3xl sm:text-4xl md:text-5xl font-black tracking-widest text-emerald-400 uppercase christmas-font drop-shadow-[0_2px_8px_rgba(16,185,129,0.5)] animate-pulse">
+                    MERRY
+                </p>
+            </div>
+            
+            <p class="text-[10px] sm:text-xs text-slate-400 font-medium mb-3">
+                Click the X or the button below to see your stats & share!
+            </p>
+            
+            <button id="btn-loss-continue" class="px-5 py-3 sm:px-6 sm:py-3.5 bg-rose-600 hover:bg-rose-500 font-extrabold text-white text-xs sm:text-sm tracking-wide rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                Continue to Share <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Core Script references -->
     <script src="words.js"></script>
     <script src="app.js"></script>

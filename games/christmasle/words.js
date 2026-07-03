@@ -79,7 +79,7 @@ const ANSWERS = [
     "SYPHILIS",
     "RABIES",
     "MURDER",
-    "ROTTEN",
+    "DISEASE",
     "PUTRID",
     "RANCID",
     "DECOMPOSE",
