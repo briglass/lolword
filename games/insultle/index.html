@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TQSTTJ00HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INSULTLE - Sarcastic Word Game</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <!-- Suppress Tailwind Play CDN Warning -->
+    <script>
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        correct: '#c026d3', // Pinkish purple for a sassy feel
+                        present: '#eab308', // Yellow
+                        absent: '#374151',  // Slate gray
+                        correctDark: '#d946ef',
+                        presentDark: '#facc15',
+                        absentDark: '#4b5563',
+                    },
+                    animation: {
+                        'pop': 'pop 0.15s ease-in-out',
+                        'flip': 'flip 0.5s ease-in-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'bounce-win': 'bounce-win 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        pop: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '40%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        flip: {
+                            '0%': { transform: 'rotateX(0deg)' },
+                            '45%': { transform: 'rotateX(90deg)' },
+                            '55%': { transform: 'rotateX(90deg)' },
+                            '100%': { transform: 'rotateX(0deg)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '15%, 45%, 75%': { transform: 'translateX(-5px)' },
+                            '30%, 60%, 90%': { transform: 'translateX(5px)' },
+                        },
+                        'bounce-win': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Win Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .flip-delay-0 { animation-delay: 0ms; }
+        .flip-delay-1 { animation-delay: 150ms; }
+        .flip-delay-2 { animation-delay: 300ms; }
+        .flip-delay-3 { animation-delay: 450ms; }
+        .flip-delay-4 { animation-delay: 600ms; }
+
+        .bounce-delay-0 { animation-delay: 0ms; }
+        .bounce-delay-1 { animation-delay: 100ms; }
+        .bounce-delay-2 { animation-delay: 200ms; }
+        .bounce-delay-3 { animation-delay: 300ms; }
+        .bounce-delay-4 { animation-delay: 400ms; }
+
+        /* Hide empty ad card wrappers if Google Ads are blocked or unfilled */
+        .ad-card:not(:has(ins.adsbygoogle[data-adsbygoogle-status="done"])),
+        .ad-card:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+            display: none !important;
+        }
+
+        /* Force Adsterra / Cameljolly ads to horizontally stretch */
+        #container-7e812c41bce777d6fc86e283014cb75e {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 auto !important;
+            box-sizing: border-box !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between overflow-hidden select-none">
+
+    <!-- Header -->
+    <header class="border-b border-slate-900 px-4 py-3 flex items-center justify-between w-full max-w-lg mx-auto shrink-0 relative z-30">
+        <div class="flex items-center gap-2">
+            <!-- Back to LOLWORD link -->
+            <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white px-2 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+            <button id="btn-help" class="text-slate-400 hover:text-rose-400 p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex-1 flex items-center justify-center gap-4">
+            <h1 class="text-2xl font-black tracking-widest bg-gradient-to-r from-fuchsia-500 via-rose-500 to-amber-500 bg-clip-text text-transparent uppercase">INSULTLE</h1>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button id="btn-stats" class="text-slate-400 hover:text-rose-400 p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="flex-grow flex flex-col justify-between overflow-hidden relative">
+
+        <!-- Insult Bubble -->
+        <div class="w-full max-w-md mx-auto px-4 pt-3 shrink-0">
+            <div id="insult-bubble" class="bg-gradient-to-r from-purple-950/40 via-rose-950/40 to-slate-950 border border-purple-900/60 rounded-2xl p-3 text-center shadow-[0_0_15px_rgba(217,70,239,0.1)] transition-all duration-300 transform scale-100 min-h-[56px] flex items-center justify-center">
+                <p id="insult-text" class="text-rose-300 font-medium text-sm md:text-base italic">Enter a guess to get insulted. If you dare.</p>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <main class="flex-grow flex flex-col justify-center items-center p-4 max-w-lg w-full mx-auto relative overflow-hidden">
+            
+            <!-- Toast Notification Container -->
+            <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+            <!-- 6x5 Letter Grid -->
+            <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[320px] my-auto">
+                <!-- Dynamically generated via JavaScript -->
+            </div>
+
+        </main>
+
+        <!-- Keyboard Area -->
+        <footer class="w-full max-w-md mx-auto p-2 pb-4 shrink-0">
+            <div id="keyboard" class="flex flex-col gap-2 max-w-md mx-auto">
+                <!-- Dynamically generated via JavaScript -->
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MODAL 1: How to Play -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-fuchsia-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                    </svg>
+                    Insultle Rules
+                </h2>
+                <button class="modal-close text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto">
+                <p>Guess the 5-letter hidden word in 6 attempts, while coping with constant psychological damage.</p>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li>Each guess must be a valid 5-letter word.</li>
+                    <li>The color of the tiles will show how close you were.</li>
+                    <li>
+                        <strong class="text-fuchsia-400">After each guess, you will receive a free, highly accurate insult regarding your intellectual abilities.</strong>
+                    </li>
+                </ul>
+
+                <hr class="border-slate-800 my-4" />
+
+                <h3 class="font-bold text-white mb-2">Colors</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-fuchsia-600 text-white rounded">G</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">R</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">O</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">U</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">P</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">G</strong> is in the word and in the correct spot.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">B</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-yellow-600 text-white rounded">L</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">A</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">N</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">D</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">L</strong> is in the word but in the wrong spot.</p>
+                    </div>
+
+                    <div>
+                        <div class="flex gap-1.5 mb-1">
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">T</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">R</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">A</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border-0 bg-slate-800 text-slate-400 rounded">S</div>
+                            <div class="w-8 h-8 flex items-center justify-center font-extrabold text-sm border border-slate-700 text-white rounded">H</div>
+                        </div>
+                        <p class="text-xs text-slate-400"><strong class="text-white">S</strong> is not in the word.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-900/50 border-t border-slate-800 flex justify-end">
+                <button class="modal-close px-5 py-2 bg-fuchsia-600 hover:bg-fuchsia-500 font-semibold text-white rounded-xl transition-colors shadow-lg shadow-fuchsia-900/20 text-sm focus:outline-none">
+                    Start Being Insulted
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Statistics & Game Over -->
+    <div id="modal-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all scale-95 duration-200">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                <h2 id="stats-title" class="text-xl font-bold tracking-tight text-white font-black">Statistics</h2>
+                <button class="modal-close text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <!-- Stats grid -->
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-played" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Played</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-winpct" class="text-2xl font-extrabold text-white">0%</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Win %</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-streak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Streak</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div id="stat-maxstreak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-1">Max Streak</div>
+                    </div>
+                </div>
+
+                <!-- Guess Distribution -->
+                <div>
+                    <h3 class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-3 text-center">Guess Distribution</h3>
+                    <div id="guess-distribution" class="space-y-2">
+                        <!-- Filled in dynamically -->
+                    </div>
+                </div>
+
+                <!-- Reveal Secret Word -->
+                <div id="reveal-word-container" class="hidden text-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-1">Secret Word (Lmao)</p>
+                    <p id="secret-word-display" class="text-2xl font-black tracking-widest text-fuchsia-400 uppercase"></p>
+                </div>
+
+                <!-- Sarcastic feedback -->
+                <div id="stats-insult-container" class="text-center bg-fuchsia-950/20 p-4 rounded-xl border border-fuchsia-900/30">
+                    <p class="text-xs text-fuchsia-400 uppercase tracking-widest font-bold mb-1">🎭 Generous Assessment</p>
+                    <p id="stats-insult-display" class="text-sm font-semibold text-fuchsia-300 italic">"I've seen slower. But not by much."</p>
+                </div>
+
+                <!-- Action section (Share) -->
+                <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="w-full flex flex-col justify-center items-center py-1">
+                        <p id="share-info-text" class="text-xs text-slate-400 mb-2 font-medium">Show the world how bad you are:</p>
+                        <button id="btn-share" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-fuchsia-600 hover:bg-fuchsia-500 font-bold text-white rounded-xl transition-colors shadow-lg shadow-fuchsia-900/20 text-sm focus:outline-none active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                            SHARE INSULT RESULT
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-900/50 border-t border-slate-800 flex justify-between items-center">
+                <button id="btn-reset-stats" class="text-xs text-rose-400 hover:text-rose-300 font-medium transition-colors focus:outline-none">
+                    Reset Stats
+                </button>
+                <button id="btn-play-again" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 font-semibold text-white rounded-xl transition-colors text-sm focus:outline-none">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Script references -->
+    <script src="allowed.js"></script>
+    <script src="words.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
