@@ -1,5 +1,5 @@
 const ANSWERS = [
-    "MURDER",
+    "BLIGHT",
     "HITLER",
     "STALIN",
     "BLOOD",
@@ -78,7 +78,7 @@ const ANSWERS = [
 	"ANTHRAX",
     "SYPHILIS",
     "RABIES",
-    "BLIGHT",
+    "MURDER",
     "ROTTEN",
     "PUTRID",
     "RANCID",
