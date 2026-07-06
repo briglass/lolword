@@ -152,6 +152,12 @@
       display: none !important;
     }
 
+    /* Position ads above CRT scanlines (z-index of .crt-overlay is 9999) */
+    .ad-card {
+      position: relative !important;
+      z-index: 10001 !important;
+    }
+
     /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally, stretch all the way across, and never stack vertically */
     #container-7e812c41bce777d6fc86e283014cb75e {
       display: block !important;
@@ -159,6 +165,8 @@
       max-width: 100% !important;
       margin: 0 auto !important;
       box-sizing: border-box !important;
+      position: relative !important;
+      z-index: 10001 !important;
     }
 
     #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
@@ -302,7 +310,7 @@
     </nav>
 
     <!-- Adsterra / Cameljolly Ads -->
-    <div class="w-full max-w-3xl md:max-w-7xl px-4 z-10">
+    <div class="w-full max-w-3xl md:max-w-7xl px-4 relative z-[10001]">
       <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
       <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
     </div>
@@ -310,7 +318,7 @@
   </main>
 
   <!-- AdSense ad unit -->
-  <div class="w-full max-w-3xl px-4 mt-8 mb-4 z-10 mx-auto ad-card">
+  <div class="w-full max-w-3xl px-4 mt-8 mb-4 relative z-[10001] mx-auto ad-card">
     <div class="bg-zinc-900/85 border-4 border-black rounded-3xl p-4 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <ins class="adsbygoogle"
            style="display:block"
