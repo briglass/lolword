@@ -78,19 +78,28 @@ function dayNumber() {
     return Math.round((todayMidnight - epochMidnight) / 86400000);
 }
 
+function hasPuzzleData() {
+    return typeof PHEWLE_PUZZLES !== 'undefined' && Array.isArray(PHEWLE_PUZZLES) && PHEWLE_PUZZLES.length > 0
+        && typeof PHEWLE_EPOCH !== 'undefined';
+}
+
 function puzzleIndex() {
     const n = dayNumber() % PHEWLE_PUZZLES.length;
     return n < 0 ? n + PHEWLE_PUZZLES.length : n;
 }
 
 function puzzleNumber() {
+    // Fall back to the number saved with a finished game if puzzle data is unavailable
+    if (typeof PHEWLE_EPOCH === 'undefined') return (dayState && dayState.num) || 0;
     return dayNumber() + 1; // PHEWLE #1 is launch day
 }
 
 function loadPuzzle() {
+    if (!hasPuzzleData()) return false;
     const entry = PHEWLE_PUZZLES[puzzleIndex()];
     solution = entry[0];
     givenGuesses = entry.slice(1);
+    return true;
 }
 
 // ---------- Dictionary ----------
@@ -99,7 +108,12 @@ function buildDictionary() {
     if (typeof ALLOWED_WORDS !== 'undefined' && Array.isArray(ALLOWED_WORDS)) {
         VALID_GUESSES = new Set(ALLOWED_WORDS.filter((w) => w.length === WORD_LENGTH));
     }
-    PHEWLE_PUZZLES.forEach((entry) => entry.forEach((w) => VALID_GUESSES.add(w)));
+    if (hasPuzzleData()) {
+        PHEWLE_PUZZLES.forEach((entry) => entry.forEach((w) => VALID_GUESSES.add(w)));
+    }
+    // Today's own words are always guessable, whatever loaded
+    if (solution) VALID_GUESSES.add(solution);
+    givenGuesses.forEach((w) => VALID_GUESSES.add(w));
 }
 
 // ---------- Wordle evaluation ----------
@@ -293,7 +307,17 @@ function endGame(won) {
     isGameOver = true;
     isRevealing = false;
 
-    dayState = { date: todayString(), guess: currentGuess, won: won, done: true };
+    // Save the full puzzle with the result so a return visit can rebuild the
+    // board and share text entirely from this state, even if words.js fails to load
+    dayState = {
+        date: todayString(),
+        num: puzzleNumber(),
+        answer: solution,
+        given: givenGuesses,
+        guess: currentGuess,
+        won: won,
+        done: true
+    };
     saveDayState();
     updateStats(won);
 
@@ -458,7 +482,8 @@ function buildShareText() {
         .filter((row) => Array.isArray(row))
         .map((row) => row.map((status) => SHARE_EMOJI[status]).join(''))
         .join('\n');
-    return `PHEWLE #${puzzleNumber()} ${score} \u{1F605}\n\n${rows}\n\nwww.lolword.com/games/phewle`;
+    const num = (dayState && dayState.num) || puzzleNumber();
+    return `PHEWLE #${num} ${score} \u{1F605}\n\n${rows}\n\nwww.lolword.com/games/phewle`;
 }
 
 function copyShareResult() {
@@ -544,8 +569,8 @@ function addKeyboardListeners() {
 // ---------- Init ----------
 
 function initialize() {
-    loadPuzzle();
-    buildDictionary();
+    // Board, keyboard, and all listeners come up first and never depend on
+    // word-list data — a data hiccup must not kill the stats/share buttons.
     loadStats();
     createBoard();
     createKeyboard();
@@ -554,12 +579,34 @@ function initialize() {
 
     dayState = loadDayState();
     if (dayState && dayState.done) {
-        // Already played today — restore the board and lock it until midnight
-        restoreFinishedGame();
+        // Already played today — restore the board and lock it until midnight.
+        // Prefer the puzzle copy saved with the result; fall back to words.js
+        // for games saved before the puzzle was included in the state.
+        if (dayState.answer && Array.isArray(dayState.given) && dayState.given.length) {
+            solution = dayState.answer;
+            givenGuesses = dayState.given;
+        } else {
+            loadPuzzle();
+        }
+        if (solution && givenGuesses.length) {
+            try {
+                restoreFinishedGame();
+            } catch (e) {
+                console.error('PHEWLE restore failed:', e);
+                showToast('Something went wrong restoring today’s game');
+            }
+        } else {
+            showToast('Couldn’t load today’s puzzle — try refreshing!');
+        }
         return;
     }
 
     // Fresh day: dramatic reveal of the 5 failed guesses
+    if (!loadPuzzle()) {
+        showToast('Couldn’t load today’s puzzle — try refreshing!');
+        return;
+    }
+    buildDictionary();
     isRevealing = true;
     const totalDelay = revealGivenGuesses(true);
     const firstVisit = !window.localStorage.getItem(statsKey);
