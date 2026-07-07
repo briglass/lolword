@@ -4,8 +4,8 @@ let GRID_ROWS = 6;
 
 const QUIET_COLORS = {
     correct: 'bg-green-600 text-white border-green-600 shadow-[0_0_12px_rgba(34,197,94,0.4)]',
-    present: 'bg-yellow-500 text-slate-950 border-yellow-500 shadow-[0_0_12px_rgba(234,179,8,0.4)]',
-    absent: 'bg-zinc-600 text-white border-zinc-600'
+    present: 'bg-red-600 text-white border-red-600 shadow-[0_0_12px_rgba(220,38,38,0.4)]',
+    absent: 'bg-black text-white border-zinc-800'
 };
 
 const gridElement = document.getElementById('grid');
@@ -178,6 +178,8 @@ function createBoard() {
     gridElement.innerHTML = '';
     // Set columns dynamically based on solution length
     gridElement.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, minmax(0, 1fr))`;
+    // Scale grid width with word length so tiles stay ~44-52px whether today is 4 or 10 letters
+    gridElement.style.maxWidth = `${Math.min(WORD_LENGTH * 52, 460)}px`;
     
     for (let row = 0; row < GRID_ROWS; row += 1) {
         for (let col = 0; col < WORD_LENGTH; col += 1) {
@@ -199,7 +201,7 @@ function createKeyboard() {
             keyButton.textContent = key;
             keyButton.dataset.key = key;
             // set flex-grow, min-width, and padding to fully use client/window width nicely
-            keyButton.className = 'flex-1 min-w-[20px] max-w-[80px] h-12 sm:h-14 rounded-xl bg-emerald-950 text-slate-100 font-extrabold shadow-md hover:bg-emerald-900 transition-colors focus:outline-none active:scale-95 text-[11px] sm:text-base border border-emerald-800/40 select-none';
+            keyButton.className = 'flex-1 min-w-[20px] max-w-[80px] h-12 sm:h-14 rounded-xl bg-zinc-500 text-white font-extrabold shadow-md hover:bg-zinc-400 transition-colors focus:outline-none active:scale-95 text-[11px] sm:text-base border border-zinc-400/30 select-none';
             if (key === 'ENTER' || key === 'BACK') {
                 keyButton.classList.add('flex-[1.5]', 'max-w-[110px]', 'text-[9px]', 'sm:text-[13px]');
             }
@@ -327,13 +329,8 @@ function revealGuessTiles(result) {
             tile.classList.add('flip');
             tile.classList.remove('bg-slateBoard', 'border-emerald-950/40', 'border-emerald-600');
             tile.classList.add(...classes);
-            if (cell.status === 'present') {
-                tile.classList.remove('text-slate-50', 'text-white');
-                tile.classList.add('text-slate-950');
-            } else {
-                tile.classList.remove('text-slate-50', 'text-slate-950');
-                tile.classList.add('text-white');
-            }
+            tile.classList.remove('text-slate-50', 'text-slate-950');
+            tile.classList.add('text-white');
         }, index * 120);
         window.setTimeout(() => tile.classList.remove('flip'), 450 + index * 120);
     });
@@ -349,7 +346,7 @@ function updateKeyboard(result) {
         if (!previousState || priority[nextState] > priority[previousState]) {
             key.dataset.state = nextState;
             const classesToRemove = Object.values(QUIET_COLORS).flatMap(c => c.split(' '));
-            key.classList.remove(...classesToRemove);
+            key.classList.remove('bg-zinc-500', 'hover:bg-zinc-400', 'border-zinc-400/30', ...classesToRemove);
             key.classList.add(...QUIET_COLORS[nextState].split(' '));
         }
     });
@@ -561,13 +558,8 @@ function renderSavedGuesses() {
             if (status && QUIET_COLORS[status]) {
                 const classes = QUIET_COLORS[status].split(' ');
                 tile.classList.add(...classes);
-                if (status === 'present') {
-                    tile.classList.remove('text-slate-50', 'text-white');
-                    tile.classList.add('text-slate-950');
-                } else {
-                    tile.classList.remove('text-slate-50', 'text-slate-950');
-                    tile.classList.add('text-white');
-                }
+                tile.classList.remove('text-slate-50', 'text-slate-950');
+                tile.classList.add('text-white');
             }
         }
     }
@@ -587,7 +579,7 @@ function renderSavedGuesses() {
             if (!previousState || priority[status] > priority[previousState]) {
                 key.dataset.state = status;
                 const classesToRemove = Object.values(QUIET_COLORS).flatMap(c => c.split(' '));
-                key.classList.remove(...classesToRemove);
+                key.classList.remove('bg-zinc-500', 'hover:bg-zinc-400', 'border-zinc-400/30', ...classesToRemove);
                 key.classList.add(...QUIET_COLORS[status].split(' '));
             }
         }
