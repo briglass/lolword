@@ -530,6 +530,39 @@
         </div>
       </a>
 
+      <!-- BUTTON 6: PHEWLE -->
+      <a href="games/phewle/index.html"
+         id="btn-phewle"
+         class="retro-btn flex flex-col items-center justify-between text-center p-3 sm:p-4 bg-[#538d4e] border-4 border-black rounded-3xl group relative overflow-hidden h-52 sm:h-56 md:h-60 select-none">
+        <!-- Wordle tile checkerboard background -->
+        <div class="absolute inset-0 bg-[linear-gradient(45deg,#3a3a3c_25%,transparent_25%,transparent_75%,#3a3a3c_75%,#3a3a3c),linear-gradient(45deg,#3a3a3c_25%,transparent_25%,transparent_75%,#3a3a3c_75%,#3a3a3c)] [background-size:20px_20px] [background-position:0_0,10px_10px] opacity-20 group-hover:scale-110 transition-transform duration-500"></div>
+
+        <!-- Header tag inside button -->
+        <span class="z-10 bg-black text-green-300 text-[9px] sm:text-xs px-2 py-0.5 sm:px-3 sm:py-1 font-mono font-bold rounded-full uppercase border-2 border-green-400 tracking-wider">
+          Starts on guess #6
+        </span>
+
+        <!-- Relieved exhale icon -->
+        <div class="z-10 my-1.5 sm:my-2 transform group-hover:-rotate-12 group-hover:scale-125 transition-all duration-300 flex justify-center items-center">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-black text-white p-2 rounded-full flex items-center justify-center border-4 border-green-400 shadow-[4px_4px_0px_0px_#000]">
+            <div class="relative">
+              <i data-lucide="wind" class="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-green-400"></i>
+              <span class="absolute -top-1 -right-1 text-[10px] sm:text-xs md:text-sm animate-bounce">😅</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button Info -->
+        <div class="z-10">
+          <h2 class="text-sm sm:text-xl md:text-2xl font-black text-black tracking-tighter md:tracking-tight uppercase group-hover:text-white transition-colors duration-200">
+            PHEWLE
+          </h2>
+          <p class="text-[9px] sm:text-xs font-bold text-black/80 mt-0.5 font-mono italic leading-snug">
+            "5 wrong guesses. You get ONE."
+          </p>
+        </div>
+      </a>
+
     </section>
 
     <!-- UN / WHO / AARP Ban Warning Banner -->
@@ -822,6 +855,43 @@
       }
     }
 
+    // Play a relieved "phew" sigh-whistle for PHEWLE
+    function playPhewSigh(forceInit = false) {
+      if (isMuted) return;
+      if (!forceInit && (!audioCtx || audioCtx.state !== 'running')) return;
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        // Descending whistle: the universal sound of dodging a bullet
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1100, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.55);
+
+        // Gentle vibrato so it sounds whistled, not synthesized
+        const vib = audioCtx.createOscillator();
+        const vibGain = audioCtx.createGain();
+        vib.frequency.value = 9;
+        vibGain.gain.value = 18;
+        vib.connect(vibGain);
+        vibGain.connect(osc.frequency);
+
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.09, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        vib.start(now);
+        osc.stop(now + 0.7);
+        vib.stop(now + 0.7);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     // Bind Sound FX to hover/actions
     document.getElementById('btn-jeff').addEventListener('mouseenter', playGoldblumChime);
     document.getElementById('btn-brundle').addEventListener('mouseenter', () => playFlyBuzz(0.8));
@@ -829,10 +899,11 @@
     document.getElementById('btn-dontle').addEventListener('mouseenter', playWarningAlarm);
     document.getElementById('btn-soon').addEventListener('mouseenter', playSpookyDrop);
     document.getElementById('btn-christmasle').addEventListener('mouseenter', playChristmasChime);
+    document.getElementById('btn-phewle').addEventListener('mouseenter', playPhewSigh);
 
     // Create floating flies and sunglasses in ambient container
     const ambientContainer = document.getElementById('ambient-container');
-    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨', '🍫', '🎫', '⛔'];
+    const itemsList = ['🕶️', '🪰', '💀', '🐛', '🦖', '🧬', '🧩', '🟩', '🟨', '🍫', '🎫', '⛔', '😅'];
 
     function spawnAmbientItem() {
       if (document.hidden) return;

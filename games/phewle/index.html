@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" class="min-h-screen">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9509983147297425"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQSTTJ00HS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TQSTTJ00HS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PHEWLE - Wordle, But You Start On The 6th Guess</title>
+    <meta name="description" content="PHEWLE: the daily word game that skips straight to the panic. 5 wrong guesses are already on the board — you get ONE shot. Phew!">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <!-- Suppress Tailwind Play CDN Warning -->
+    <script>
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Classic Wordle dark-theme palette
+                        wbg: '#121213',
+                        correct: '#538d4e',
+                        present: '#b59f3b',
+                        absent: '#3a3a3c',
+                        keybg: '#818384',
+                        tileborder: '#3a3a3c',
+                        tileactive: '#565758',
+                    },
+                    animation: {
+                        'pop': 'pop 0.12s ease-in-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'bounce-win': 'bounceWin 0.9s ease',
+                    },
+                    keyframes: {
+                        pop: {
+                            '0%': { transform: 'scale(0.9)' },
+                            '50%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '15%, 45%, 75%': { transform: 'translateX(-5px)' },
+                            '30%, 60%, 90%': { transform: 'translateX(5px)' },
+                        },
+                        bounceWin: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '30%': { transform: 'translateY(-14px)' },
+                            '55%': { transform: 'translateY(3px)' },
+                            '75%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Libre Franklin (closest to Wordle's Clear Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Win Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Libre Franklin', 'Helvetica Neue', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .tile {
+            transition: transform 0.1s ease;
+        }
+        /* Wordle-style tile flip: JS swaps colors at the halfway point */
+        .tile.flip {
+            animation: tileFlip 0.5s ease forwards;
+        }
+        @keyframes tileFlip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+
+        /* Hide empty ad card wrappers if Google Ads are blocked or unfilled */
+        .ad-card:not(:has(ins.adsbygoogle[data-adsbygoogle-status="done"])),
+        .ad-card:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+            display: none !important;
+        }
+
+        /* Force Adsterra / Cameljolly ads to always show up 4 across horizontally, stretch all the way across, and never stack vertically */
+        #container-7e812c41bce777d6fc86e283014cb75e {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 auto !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            align-items: stretch !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            gap: 6px !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
+            flex: 1 1 0% !important;
+            width: 25% !important;
+            max-width: 25% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 2px !important;
+            box-sizing: border-box !important;
+            display: block !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e a {
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__img-container"],
+        #container-7e812c41bce777d6fc86e283014cb75e [class*="__img"] {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e img {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            object-fit: cover !important;
+            box-sizing: border-box !important;
+        }
+
+        #container-7e812c41bce777d6fc86e283014cb75e * {
+            font-size: clamp(8px, 1.8vw, 12px) !important;
+            line-height: 1.15 !important;
+            text-align: center !important;
+        }
+
+        /* Desktop styles (viewport >= 768px) */
+        @media (min-width: 768px) {
+            #container-7e812c41bce777d6fc86e283014cb75e [class*="__stand"] {
+                gap: 16px !important;
+            }
+            #container-7e812c41bce777d6fc86e283014cb75e [class*="__bn-container"] {
+                padding: 8px !important;
+            }
+            #container-7e812c41bce777d6fc86e283014cb75e * {
+                font-size: clamp(12px, 1.2vw, 16px) !important;
+                line-height: 1.25 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-wbg text-zinc-100 min-h-screen flex flex-col justify-start items-center overflow-y-auto select-none">
+
+    <!-- Header (Wordle style: thin bottom border, centered serif-ish logo) -->
+    <header class="border-b border-tileborder px-3 py-2 flex items-center justify-between w-full max-w-lg mx-auto shrink-0">
+        <div class="flex items-center gap-2">
+            <!-- Back to LOLWORD link -->
+            <a href="../../index.html" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white px-2 py-1.5 bg-zinc-900 border border-tileborder hover:border-zinc-500 rounded-lg transition-all flex items-center gap-1 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                LOLWORD.COM
+            </a>
+            <button id="btn-help" class="text-zinc-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="How to play">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                </svg>
+            </button>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white select-none cursor-default">
+            PHEWLE
+        </h1>
+
+        <div class="flex items-center gap-2">
+            <button id="btn-stats" class="text-zinc-400 hover:text-white p-1 rounded transition-colors focus:outline-none" aria-label="Statistics">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="flex flex-col justify-start items-center py-1 px-4 max-w-lg w-full mx-auto relative">
+
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex flex-col items-center gap-2 pointer-events-none w-full max-w-xs"></div>
+
+        <!-- Tagline -->
+        <p class="text-[11px] sm:text-xs text-zinc-500 font-semibold mt-2 tracking-wide text-center">
+            Someone already blew 5 guesses. You get <span class="text-white font-extrabold">ONE</span>. Phew. 😅
+        </p>
+
+        <!-- 6x5 Letter Grid -->
+        <div id="grid" class="grid grid-cols-5 grid-rows-6 gap-1.5 w-full max-w-[280px] sm:max-w-[330px] mt-3 mb-2" style="min-height: 18rem;">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Keyboard Area -->
+    <footer class="w-full max-w-md md:max-w-7xl mx-auto pt-1 pb-4 px-2 shrink-0">
+        <div id="keyboard" class="flex flex-col gap-1.5 max-w-md mx-auto">
+            <!-- Dynamically generated via JavaScript -->
+        </div>
+        <!-- Adsterra / Cameljolly Ads -->
+        <div class="w-full mt-4 max-w-md md:max-w-5xl lg:max-w-7xl mx-auto">
+            <script async="async" data-cfasync="false" src="https://cameljolly.com/7e812c41bce777d6fc86e283014cb75e/invoke.js"></script>
+            <div id="container-7e812c41bce777d6fc86e283014cb75e"></div>
+        </div>
+    </footer>
+
+    <!-- AdSense ad unit -->
+    <div class="w-full max-w-md mx-auto px-4 mt-2 mb-4 z-10 ad-card">
+      <div class="bg-zinc-900/80 border border-tileborder rounded-2xl p-4 text-center">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9509983147297425"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    <!-- MODAL 1: How to Play -->
+    <div id="modal-help" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1b] border border-tileborder rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all duration-200">
+            <div class="p-5 border-b border-tileborder flex justify-between items-center">
+                <h2 class="text-xl font-extrabold tracking-tight text-white">How To Play PHEWLE</h2>
+                <button class="modal-close text-zinc-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-5 space-y-3 text-sm text-zinc-300 leading-relaxed max-h-[65vh] overflow-y-auto">
+                <p>It's WORDLE... except you walk in on the <span class="font-extrabold text-white">6th and final guess</span>. 😅</p>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li>Five wrong guesses are <strong class="text-white">already on the board</strong>.</li>
+                    <li>Read the clues. Feel the pressure. You get <strong class="text-white">ONE guess</strong>.</li>
+                    <li>New puzzle every day at midnight. One play per day.</li>
+                </ul>
+                <div class="pt-2 space-y-2">
+                    <p class="font-bold text-white text-xs uppercase tracking-wider">Examples</p>
+                    <div class="flex gap-1.5 items-center">
+                        <div class="w-9 h-9 bg-correct rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">W</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">E</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">A</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">R</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">Y</div>
+                    </div>
+                    <p class="text-xs"><span class="font-bold text-white">W</span> is in the word and in the correct spot.</p>
+                    <div class="flex gap-1.5 items-center">
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">P</div>
+                        <div class="w-9 h-9 bg-present rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">I</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">L</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">O</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">T</div>
+                    </div>
+                    <p class="text-xs"><span class="font-bold text-white">I</span> is in the word but in the wrong spot.</p>
+                    <div class="flex gap-1.5 items-center">
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">V</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">A</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">G</div>
+                        <div class="w-9 h-9 bg-absent rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">U</div>
+                        <div class="w-9 h-9 border-2 border-tileactive rounded-[3px] flex items-center justify-center font-extrabold text-white text-lg">E</div>
+                    </div>
+                    <p class="text-xs"><span class="font-bold text-white">U</span> is not in the word in any spot.</p>
+                </div>
+                <p class="text-xs text-zinc-500 pt-1">A game from <a href="../../index.html" class="underline hover:text-white font-bold">LOLWORD.COM</a> — surreal word games for absurd people.</p>
+            </div>
+            <div class="p-5 bg-black/30 border-t border-tileborder flex justify-end">
+                <button class="modal-close px-5 py-2 bg-correct hover:brightness-110 font-bold text-white rounded-full transition-all text-sm focus:outline-none">
+                    No Pressure. Just One Guess.
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Statistics & Game Over -->
+    <div id="modal-stats" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1b] border border-tileborder rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all duration-200">
+            <div class="p-5 border-b border-tileborder flex justify-between items-center">
+                <h2 id="stats-title" class="text-xl font-extrabold tracking-tight text-white">Statistics</h2>
+                <button class="modal-close text-zinc-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-5 space-y-4">
+                <!-- Status Banner -->
+                <div id="status-banner" class="hidden p-4 rounded-xl border text-center font-bold text-lg select-none">
+                    <!-- Dynamic text: Win or Loss -->
+                </div>
+
+                <!-- Reveal word on loss -->
+                <div id="reveal-word-container" class="hidden text-center text-sm text-zinc-400">
+                    The word was <span id="secret-word-display" class="font-extrabold text-white tracking-widest"></span>
+                </div>
+
+                <!-- Stats grid -->
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-black/40 p-3 rounded-xl border border-tileborder">
+                        <div id="stat-played" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Played</div>
+                    </div>
+                    <div class="bg-black/40 p-3 rounded-xl border border-tileborder">
+                        <div id="stat-winpct" class="text-2xl font-extrabold text-white">0%</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Phew %</div>
+                    </div>
+                    <div class="bg-black/40 p-3 rounded-xl border border-tileborder">
+                        <div id="stat-streak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Streak</div>
+                    </div>
+                    <div class="bg-black/40 p-3 rounded-xl border border-tileborder">
+                        <div id="stat-maxstreak" class="text-2xl font-extrabold text-white">0</div>
+                        <div class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mt-1">Max Streak</div>
+                    </div>
+                </div>
+
+                <!-- Countdown + Share row (Wordle-style) -->
+                <div class="flex items-stretch gap-3 bg-black/40 p-4 rounded-xl border border-tileborder">
+                    <div class="flex-1 flex flex-col justify-center items-center border-r border-tileborder pr-3">
+                        <p class="text-[10px] uppercase tracking-wider font-semibold text-zinc-400">Next PHEWLE</p>
+                        <p id="countdown" class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums mt-1">--:--:--</p>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center items-center pl-1">
+                        <button id="btn-share" class="w-full h-12 flex items-center justify-center gap-2 px-4 bg-correct hover:brightness-110 font-extrabold text-white rounded-full transition-all text-sm focus:outline-none active:scale-95">
+                            SHARE
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 bg-black/30 border-t border-tileborder flex justify-between items-center">
+                <button id="btn-reset-stats" class="text-xs text-zinc-500 hover:text-zinc-300 font-medium transition-colors focus:outline-none">
+                    Reset Stats
+                </button>
+                <a href="../../index.html" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors">
+                    More games at LOLWORD.COM →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Word lists: big allowed-guess dictionary (shared with seizurele) + PHEWLE daily puzzles -->
+    <script src="../seizurele/allowed.js"></script>
+    <script src="words.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
