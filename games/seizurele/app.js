@@ -15,6 +15,13 @@ const QUIET_COLORS = {
     present: 'bg-present text-white border-present shadow-[0_0_0_2px_rgba(181,159,59,0.4)]',
     absent: 'bg-absent text-white border-absent shadow-[0_0_0_2px_rgba(58,58,60,0.4)]'
 };
+// Keyboard-specific colors: green/yellow match the tiles, but absent keys go
+// pitch black with dimmed letters so guessed-and-missing letters are unmistakable
+const KEY_COLORS = {
+    correct: QUIET_COLORS.correct,
+    present: QUIET_COLORS.present,
+    absent: 'bg-black text-zinc-600 opacity-60 border border-zinc-800'
+};
 
 const gridElement = document.getElementById('grid');
 const keyboardElement = document.getElementById('keyboard');
@@ -301,6 +308,8 @@ function flashButtons() {
     const buttons = Array.from(keyboardElement.querySelectorAll('button'));
     const color = getRandomFlashColor();
     buttons.forEach((button) => {
+        // Dead letters stay visibly dead — never flash absent keys
+        if (button.dataset.state === 'absent') return;
         button.classList.add('flash-button');
         button.style.backgroundColor = color;
         button.style.color = '#111';
@@ -478,9 +487,9 @@ function updateKeyboard(result) {
         const priority = { absent: 1, present: 2, correct: 3 };
         if (!previousState || priority[nextState] > priority[previousState]) {
             key.dataset.state = nextState;
-            const classesToRemove = Object.values(QUIET_COLORS).flatMap(c => c.split(' '));
-            key.classList.remove(...classesToRemove);
-            key.classList.add(...QUIET_COLORS[nextState].split(' '));
+            const classesToRemove = [...Object.values(QUIET_COLORS), ...Object.values(KEY_COLORS)].flatMap(c => c.split(' '));
+            key.classList.remove('bg-slate-800', 'hover:bg-slate-700', 'text-slate-100', ...classesToRemove);
+            key.classList.add(...KEY_COLORS[nextState].split(' '));
         }
     });
 }
