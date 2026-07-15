@@ -37,6 +37,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Creepster&family=Rubik+Glitch&family=Space+Grotesk:wght@400;700;900&family=Syne:wght@800&display=swap" rel="stylesheet">
+  <!-- Fluid Player (LOLWORD TV / Hilltop video ad) -->
+  <link rel="stylesheet" href="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.css" type="text/css"/>
   
   <style>
     /* Wild, animated, changing gradient background */
@@ -579,6 +581,19 @@
       </div>
     </div>
 
+    <!-- LOLWORD TV — Hilltop VAST 3.0 video ad (pre-roll via Fluid Player) -->
+    <div class="w-full max-w-3xl px-4 mt-8 mb-4 relative z-[10001] select-none">
+      <div class="bg-black border-4 border-black rounded-3xl overflow-hidden shadow-[10px_10px_0px_0px_#000]">
+        <div class="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b-4 border-black">
+          <span class="font-mono text-xs font-black tracking-widest text-fuchsia-400 uppercase">📺 LOLWORD TV</span>
+          <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider">now broadcasting: nothing</span>
+        </div>
+        <video id="lolword-tv" muted playsinline style="width:100%; display:block;">
+          <source src="assets/lolword-tv.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+
     <!-- AdSense ad unit -->
     <div class="w-full max-w-3xl px-4 mt-8 mb-4 relative z-[10001] ad-card">
       <div class="bg-zinc-900/85 border-4 border-black rounded-3xl p-4 text-center shadow-[10px_10px_0px_0px_#000]">
@@ -983,6 +998,48 @@
         setTimeout(() => el.remove(), 10500);
       }, i * 800);
     }
+  </script>
+
+  <!-- Fluid Player + Hilltop VAST 3.0 pre-roll for LOLWORD TV -->
+  <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
+  <script>
+    try {
+      fluidPlayer('lolword-tv', {
+        layoutControls: {
+          autoPlay: true,         // muted autoplay so the pre-roll impression fires on page load
+          mute: true,
+          loop: true,
+          fillToContainer: true,
+          keyboardControl: false, // don't hijack the page's keyboard
+          allowDownload: false,
+          playbackRateEnabled: false,
+          allowTheatre: false,
+          primaryColor: '#ff00ff'
+        },
+        vastOptions: {
+          adList: [
+            {
+              roll: 'preRoll', // Plays before the LOLWORD TV loop starts
+              vastTag: 'https://crookedagreement.com/domGF.zXdzGXNRvcZVGkUS/xefm/9/uSZQUnlTkcP-TMctyKMOjxQxxYMezTM/tmN/zCIVy/N/DOEtzDNqwS'
+            }
+          ]
+        }
+      });
+    } catch (e) {
+      console.warn('LOLWORD TV player failed to start:', e);
+    }
+  </script>
+  <script>
+  (function(fhj){
+  var d = document,
+      s = d.createElement('script'),
+      l = d.scripts[d.scripts.length - 1];
+  s.settings = fhj || {};
+  s.src = "\/\/shameful-farm.com\/bhXwVps.dhGxlb0HYNWRcj\/he\/m\/9-uGZIUDlokGP\/TLcmyeMBjTQQxfOnD\/kgtmNKzlItyxNgDmE\/5XMqwJ";
+  s.async = true;
+  s.referrerPolicy = 'no-referrer-when-downgrade';
+  l.parentNode.insertBefore(s, l);
+  })({})
   </script>
 </body>
 </html>
